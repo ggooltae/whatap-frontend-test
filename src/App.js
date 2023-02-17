@@ -1,16 +1,18 @@
-import { useEffect, useState } from 'react'
-import api from './api'
-const HOUR = 1000 * 60 * 60
+import { useEffect, useState } from 'react';
+import api from './api';
+
+const HOUR = 1000 * 60 * 60;
+
 function App() {
-  const [actAgent, setActAgent] = useState()
-  const [httpcSeries, setHttpcSeries] = useState()
+  const [actAgent, setActAgent] = useState();
+  const [httpcSeries, setHttpcSeries] = useState();
 
   useEffect(() => {
-    api.spot('act_agent').then((result) => setActAgent(result))
+    api.spot('act_agent').then((result) => setActAgent(result));
     api
       .series('exception/{stime}/{etime}', { stime: Date.now() - HOUR, etime: Date.now() })
-      .then((result) => setHttpcSeries(result))
-  }, [])
+      .then((result) => setHttpcSeries(result));
+  }, []);
 
   return (
     <div style={{ padding: 20 }}>
@@ -25,7 +27,7 @@ function App() {
       <h3>통계 정보 조회 URL</h3>
       <pre>{JSON.stringify(httpcSeries, null, 4)}</pre>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

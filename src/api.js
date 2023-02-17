@@ -36,6 +36,7 @@ const OPEN_API = {
 };
 const getPath = (url, param = {}) => {
   let path = url;
+
   for (let key in param) {
     path = path.replace(new RegExp('\\{' + key + '\\}', 'g'), param[key]);
   }
