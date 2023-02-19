@@ -33,11 +33,8 @@ const OPEN_API: Record<string, Record<string, string>> = {
     'sql/{stime}/{etime}': 'SQL 발생 ',
   },
 };
-const API_KEYS: string[] = [
-  'act_agent',
-  'inact_agent',
-  'cpu',
-  'host',
+const INFORM_KEYS: string[] = ['act_agent', 'inact_agent', 'cpu', 'host'];
+const ACTIVE_KEYS: string[] = [
   'act_method',
   'act_sql',
   'act_httpc',
@@ -82,4 +79,4 @@ const getOpenApi =
 const spot = getOpenApi('');
 const series = getOpenApi('json');
 
-export default { spot, series, API_KEYS };
+export default { spot, series, OPEN_API, INFORM_KEYS, ACTIVE_KEYS };
