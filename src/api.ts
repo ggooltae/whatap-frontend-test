@@ -40,7 +40,6 @@ const ACTIVE_KEYS: string[] = [
   'act_httpc',
   'act_dbc',
   'act_socket',
-  'tps',
 ];
 
 const getPath = (url: string, param: Record<string, string> = {}): string => {
