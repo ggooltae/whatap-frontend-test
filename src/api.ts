@@ -33,7 +33,7 @@ const OPEN_API: Record<string, Record<string, string>> = {
     'sql/{stime}/{etime}': 'SQL 발생 ',
   },
 };
-const INFORM_KEYS: string[] = ['act_agent', 'inact_agent', 'cpu', 'host'];
+const INFORM_KEYS: string[] = ['act_agent', 'inact_agent', 'cpucore', 'host'];
 const ACTIVE_KEYS: string[] = [
   'act_method',
   'act_sql',
