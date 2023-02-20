@@ -36,17 +36,13 @@ function BarChart({ activeData }: IBarChart) {
     const yAxis = axisLeft(yScale);
 
     if (svg.select('#yAxisGroup').empty()) {
-      svg
-        .append('g')
-        .attr('id', 'yAxisGroup')
-        .attr('transform', `translate(${margin.left},0)`)
-        .call(yAxis);
-    } else {
-      svg
-        .select<SVGGElement>('#yAxisGroup')
-        .attr('transform', `translate(${margin.left},0)`)
-        .call(yAxis);
+      svg.append('g').attr('id', 'yAxisGroup');
     }
+
+    svg
+      .select<SVGGElement>('#yAxisGroup')
+      .attr('transform', `translate(${margin.left},0)`)
+      .call(yAxis);
 
     bars
       .join('rect')
