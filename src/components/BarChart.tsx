@@ -1,7 +1,9 @@
 import { useEffect, useRef } from 'react';
-import * as d3 from 'd3';
+import { select } from 'd3-selection';
+import { scaleLinear, scaleBand } from 'd3-scale';
+import { axisLeft } from 'd3-axis';
+import 'd3-transition';
 
-import api from '../api';
 import { SpotData } from '../customTypes';
 
 interface IBarChart {
@@ -9,34 +11,70 @@ interface IBarChart {
 }
 
 function BarChart({ activeData }: IBarChart) {
-  const svgRef = useRef<SVGSVGElement | null>(null);
+  const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
-    const svg = d3.select(svgRef.current);
+    const svg = select(svgRef.current);
+    const svgWidth = svg.node()?.getBoundingClientRect().width || 0;
+    const svgHeight = svg.node()?.getBoundingClientRect().height || 0;
+
     const keys = Object.keys(activeData);
     const values = Object.values(activeData);
-    const rects = svg.selectAll('rect').data(values);
-    const texts = svg.selectAll('text').data(values);
+    const margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
-    rects
+    const bars = svg.selectAll('rect').data(values);
+    const texts = svg.selectAll('.value-text').data(values);
+
+    const xScale = scaleLinear()
+      .domain([0, Math.max(...values)])
+      .range([0, svgWidth - margin.left - margin.right]);
+    const yScale = scaleBand()
+      .domain(keys.map((key) => key.replace('act_', '').toUpperCase()))
+      .range([margin.top, svgHeight - margin.bottom])
+      .padding(0.1);
+
+    const yAxis = axisLeft(yScale);
+
+    if (svg.select('#yAxisGroup').empty()) {
+      svg
+        .append('g')
+        .attr('id', 'yAxisGroup')
+        .attr('transform', `translate(${margin.left},0)`)
+        .call(yAxis);
+    } else {
+      svg
+        .select<SVGGElement>('#yAxisGroup')
+        .attr('transform', `translate(${margin.left},0)`)
+        .call(yAxis);
+    }
+
+    bars
       .join('rect')
-      .attr('x', 0)
-      .attr('y', (_, i) => i * 25)
-      .attr('fill', 'skyblue')
-      .attr('height', 20)
+      .attr('x', margin.left)
+      .attr(
+        'y',
+        (_, i) => yScale(keys[i].replace('act_', '').toUpperCase()) || 0,
+      )
+      .attr('fill', 'steelblue')
+      .attr('height', yScale.bandwidth())
       .transition()
-      .duration(500)
-      .attr('width', (d) => d * 30 + 5);
+      .duration(1000)
+      .attr('width', (d) => xScale(d));
 
     texts
       .join('text')
-      .attr('x', 5)
-      .attr('y', (_, i) => i * 25 + 15)
-      .attr('fill', 'black')
-      .text(
-        (d, i) =>
-          `${api.OPEN_API[''][keys[i]].replace(/^액티브\s|\s수$/g, '')} (${d})`,
-      );
+      .attr('class', 'value-text')
+      .attr(
+        'y',
+        (_, i) =>
+          (yScale(keys[i].replace('act_', '').toUpperCase()) || 0) +
+          yScale.bandwidth() * 0.8,
+      )
+      .attr('fill', 'red')
+      .transition()
+      .duration(1000)
+      .text((d) => d)
+      .attr('x', (d) => xScale(d) + margin.left + 5);
   }, [activeData]);
 
   return (
