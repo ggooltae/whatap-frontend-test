@@ -15,36 +15,24 @@ function BarChart({ activeData }: IBarChart) {
 
   useEffect(() => {
     const svg = select(svgRef.current);
-    const svgWidth = svg.node()?.getBoundingClientRect().width || 0;
-    const svgHeight = svg.node()?.getBoundingClientRect().height || 0;
+    const svgWidth = svgRef.current?.clientWidth || 0;
+    const svgHeight = svgRef.current?.clientHeight || 0;
+    const margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
     const keys = Object.keys(activeData);
     const values = Object.values(activeData);
-    const margin = { top: 20, right: 20, bottom: 20, left: 50 };
-
-    const bars = svg.selectAll('rect').data(values);
-    const texts = svg.selectAll('.value-text').data(values);
 
     const xScale = scaleLinear()
       .domain([0, Math.max(...values)])
-      .range([0, svgWidth - margin.left - margin.right]);
+      .range([0, svgWidth - margin.left - margin.right - 10]);
     const yScale = scaleBand()
       .domain(keys.map((key) => key.replace('act_', '').toUpperCase()))
       .range([margin.top, svgHeight - margin.bottom])
       .padding(0.1);
 
-    const yAxis = axisLeft(yScale);
-
-    if (svg.select('#yAxisGroup').empty()) {
-      svg.append('g').attr('id', 'yAxisGroup');
-    }
-
     svg
-      .select<SVGGElement>('#yAxisGroup')
-      .attr('transform', `translate(${margin.left},0)`)
-      .call(yAxis);
-
-    bars
+      .selectAll('rect')
+      .data(values)
       .join('rect')
       .attr('x', margin.left)
       .attr(
@@ -57,26 +45,35 @@ function BarChart({ activeData }: IBarChart) {
       .duration(1000)
       .attr('width', (d) => xScale(d));
 
-    texts
+    svg
+      .selectAll('.value-text')
+      .data(values)
       .join('text')
       .attr('class', 'value-text')
       .attr(
         'y',
         (_, i) =>
           (yScale(keys[i].replace('act_', '').toUpperCase()) || 0) +
-          yScale.bandwidth() * 0.8,
+          yScale.bandwidth() * 0.6,
       )
       .attr('fill', 'red')
       .transition()
       .duration(1000)
       .text((d) => d)
       .attr('x', (d) => xScale(d) + margin.left + 5);
+
+    svg
+      .select<SVGGElement>('#axisY')
+      .attr('transform', `translate(${margin.left},0)`)
+      .call(axisLeft(yScale));
   }, [activeData]);
 
   return (
     <>
       <h3>Active Status</h3>
-      <svg ref={svgRef}></svg>
+      <svg ref={svgRef} width="600" height="300">
+        <g id="axisY" />
+      </svg>
     </>
   );
 }
