@@ -1,19 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
 
 import api from './api';
-import { SpotData, SeriesData } from './customTypes';
+import { SpotData, ProjectData } from './customTypes';
 
-const HOUR = 1000 * 60 * 60;
-const INTERVAL_DELAY = 5000;
+import { TIME, SIZE } from './config/constants';
 
 function App() {
   const [informData, setInformData] = useState<SpotData>({});
   const [activeData, setActiveData] = useState<SpotData>({});
-  const [sqlSeriesData, setSqlSeriesData] = useState<SeriesData>();
+  const [TPSData, setTPSData] = useState<ProjectData>([]);
+  const TPSDataRef = useRef<ProjectData>([]);
+
+  useEffect(() => {
+    TPSDataRef.current = TPSData;
+  }, [TPSData]);
 
   useEffect(() => {
     async function getSpotData(
@@ -34,28 +38,67 @@ function App() {
         console.error('Error fetching spot data:', error);
       }
     }
-    async function getSeriesData() {
-      try {
-        const newSeriesData = await api.series('sql/{stime}/{etime}', {
-          stime: (Date.now() - HOUR).toString(),
-          etime: Date.now().toString(),
-        });
+    async function getProjectData(
+      type: string,
+      key: string,
+      setState: React.Dispatch<React.SetStateAction<ProjectData>>,
+    ) {
+      const currentTime = Date.now();
 
-        setSqlSeriesData(newSeriesData.data);
+      try {
+        if (TPSDataRef.current.length === 0) {
+          const newProjectData: ProjectData = [];
+
+          for (let i = SIZE.PROJECT_DATA_SIZE_LIMIT; i > 0; i--) {
+            const response = await api.project(
+              `tag/${type}/${key}?stime={stime}&etime={etime}&timeMerge={timeMerge}`,
+              {
+                stime: (currentTime - TIME.INTERVAL_DELAY * i).toString(),
+                etime: (currentTime - TIME.INTERVAL_DELAY * (i - 1)).toString(),
+                timeMerge: 'avg',
+              },
+            );
+
+            newProjectData.push({
+              time: currentTime - TIME.INTERVAL_DELAY * (i - 1),
+              data: response.data,
+            });
+          }
+
+          setState(newProjectData);
+        } else {
+          const newProjectData: ProjectData = TPSDataRef.current.slice();
+          const response = await api.project(
+            `tag/${type}/${key}?stime={stime}&etime={etime}&timeMerge={timeMerge}`,
+            {
+              stime: (currentTime - TIME.INTERVAL_DELAY).toString(),
+              etime: currentTime.toString(),
+              timeMerge: 'avg',
+            },
+          );
+
+          newProjectData.shift();
+          newProjectData.push({ time: currentTime, data: response.data });
+
+          setState(newProjectData);
+        }
       } catch (error) {
-        console.error('Error fetching series data:', error);
+        console.error('Error fetching project data:', error);
       }
     }
 
     getSpotData(api.INFORM_KEYS, setInformData);
     getSpotData(api.ACTIVE_KEYS, setActiveData);
-    getSeriesData();
+    getProjectData('app_counter', 'tps', setTPSData);
 
     const activeIntervalId = setInterval(
       () => getSpotData(api.ACTIVE_KEYS, setActiveData),
-      INTERVAL_DELAY,
+      TIME.INTERVAL_DELAY,
     );
-    const seriesIntervalId = setInterval(getSeriesData, INTERVAL_DELAY);
+    const seriesIntervalId = setInterval(
+      () => getProjectData('app_counter', 'tps', setTPSData),
+      TIME.INTERVAL_DELAY,
+    );
 
     return function cleanUp() {
       clearInterval(activeIntervalId);
@@ -68,7 +111,7 @@ function App() {
       <h1>Application Monitoring Dashboard</h1>
       <Informatics informData={informData} />
       <BarChart activeData={activeData} />
-      <LineChart sqlSeriesData={sqlSeriesData} />
+      <LineChart TPSData={TPSData} />
     </div>
   );
 }

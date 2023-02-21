@@ -30,7 +30,10 @@ const OPEN_API: Record<string, Record<string, string>> = {
   },
   json: {
     'exception/{stime}/{etime}': 'Exception 발생 ',
-    'sql/{stime}/{etime}': 'SQL 발생 ',
+  },
+  raw: {
+    'tag/app_counter/tps?stime={stime}&etime={etime}&timeMerge={timeMerge}':
+      '프로젝트 TPS',
   },
 };
 const INFORM_KEYS: string[] = ['act_agent', 'inact_agent', 'cpucore', 'host'];
@@ -77,5 +80,6 @@ const getOpenApi =
 
 const spot = getOpenApi('');
 const series = getOpenApi('json');
+const project = getOpenApi('raw');
 
-export default { spot, series, OPEN_API, INFORM_KEYS, ACTIVE_KEYS };
+export default { spot, series, project, OPEN_API, INFORM_KEYS, ACTIVE_KEYS };
