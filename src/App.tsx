@@ -78,7 +78,10 @@ function App() {
           );
 
           newProjectData.shift();
-          newProjectData.push({ time: currentTime, data: response.data });
+          newProjectData.push({
+            time: currentTime,
+            data: response.data,
+          });
 
           setState(newProjectData);
         }

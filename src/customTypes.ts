@@ -5,4 +5,6 @@ export type SeriesData = {
   total: number;
 };
 
-export type ProjectData = Record<string, string | number>[];
+export type ProjectData = { time: number; data: string | number }[];
+
+export type TimeData = { time: number; data: string | number };
