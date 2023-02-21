@@ -1,7 +1,7 @@
 import React from 'react';
 
 import api from '../api';
-import { SpotData } from '../customTypes';
+import type { SpotData } from '../customTypes';
 
 interface IInformatics {
   informData: SpotData;

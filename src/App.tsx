@@ -5,7 +5,7 @@ import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
 
 import api from './api';
-import { SpotData, ProjectData } from './customTypes';
+import type { SpotData, ProjectData } from './customTypes';
 
 import { TIME, SIZE } from './config/constants';
 

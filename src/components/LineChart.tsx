@@ -30,7 +30,7 @@ function LineChart({ TPSData }: ILineChart) {
       .range([0, chartWidth]);
     const yScale = scaleLinear()
       .domain([0, Math.max(...TPSData.map((obj) => Number(obj.data)))])
-      .range([chartHeight, 0]);
+      .range([chartHeight, margin.bottom]);
 
     const valueLine = line<TimeData>()
       .x((d) => xScale(d.time))

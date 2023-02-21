@@ -4,7 +4,7 @@ import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisLeft } from 'd3-axis';
 import 'd3-transition';
 
-import { SpotData } from '../customTypes';
+import type { SpotData } from '../customTypes';
 
 interface IBarChart {
   activeData: SpotData;
