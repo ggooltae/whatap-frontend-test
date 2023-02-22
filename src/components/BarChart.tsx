@@ -3,6 +3,7 @@ import { select } from 'd3-selection';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisLeft } from 'd3-axis';
 import 'd3-transition';
+import styled from 'styled-components';
 
 import type { SpotData } from '../customTypes';
 
@@ -54,9 +55,9 @@ function BarChart({ activeData }: IBarChart) {
         'y',
         (_, i) =>
           (yScale(keys[i].replace('act_', '').toUpperCase()) || 0) +
-          yScale.bandwidth() * 0.6,
+          yScale.bandwidth() * 0.8,
       )
-      .attr('fill', 'red')
+      .attr('fill', 'black')
       .transition()
       .duration(1000)
       .text((d) => d)
@@ -69,13 +70,28 @@ function BarChart({ activeData }: IBarChart) {
   }, [activeData]);
 
   return (
-    <>
+    <Container>
       <h3>Active Status</h3>
-      <svg ref={svgRef} width="600" height="300">
+      <SVG ref={svgRef}>
         <g id="axisY" />
-      </svg>
-    </>
+      </SVG>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  grid-area: c;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  background-color: white;
+`;
+
+const SVG = styled.svg`
+  width: 80%;
+`;
 
 export default BarChart;

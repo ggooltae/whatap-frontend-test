@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 
 import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
@@ -110,13 +111,46 @@ function App() {
   }, []);
 
   return (
-    <div style={{ padding: 20 }}>
-      <h1>Application Monitoring Dashboard</h1>
-      <Informatics informData={informData} />
-      <BarChart activeData={activeData} />
-      <LineChart TPSData={TPSData} />
-    </div>
+    <>
+      <Global />
+      <GridContainer>
+        <Title>Application Monitoring Dashboard</Title>
+        <Informatics informData={informData} />
+        <BarChart activeData={activeData} />
+        <LineChart TPSData={TPSData} />
+      </GridContainer>
+    </>
   );
 }
+
+const Global = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+    margin: 0;
+  }
+
+  body {
+    padding: 0rem;
+    background-color: white;
+  }
+`;
+
+const GridContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: 1fr, 3fr, 3fr, 3fr;
+  grid-gap: 0.5rem;
+  grid-template-areas:
+    'a a'
+    'b c'
+    'd d';
+  padding: 3rem;
+`;
+
+const Title = styled.h1`
+  grid-area: a;
+  text-align: center;
+  margin-bottom: 2rem;
+`;
 
 export default App;

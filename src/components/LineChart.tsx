@@ -4,6 +4,7 @@ import { scaleLinear, scaleTime } from 'd3-scale';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { line } from 'd3-shape';
 import 'd3-transition';
+import styled from 'styled-components';
 
 import { ProjectData, TimeData } from '../customTypes';
 
@@ -57,15 +58,31 @@ function LineChart({ TPSData }: ILineChart) {
   }, [TPSData]);
 
   return (
-    <>
+    <Container>
       <h3>평균 TPS</h3>
-      <svg ref={svgRef} width="800" height="300">
+      <SVG ref={svgRef}>
         <path id="chart" />
         <g id="axisX" />
         <g id="axisY" />
-      </svg>
-    </>
+      </SVG>
+    </Container>
   );
 }
+
+const Container = styled.div`
+  grid-area: d;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border: 1px solid black;
+  border-radius: 0.5rem;
+  background-color: white;
+`;
+
+const SVG = styled.svg`
+  width: 80%;
+`;
 
 export default LineChart;
