@@ -8,10 +8,10 @@ import styled from 'styled-components';
 import type { SpotData } from '../customTypes';
 
 interface IBarChart {
-  activeData: SpotData;
+  chartData: SpotData;
 }
 
-function BarChart({ activeData }: IBarChart) {
+function BarChart({ chartData }: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
 
   useEffect(() => {
@@ -20,8 +20,8 @@ function BarChart({ activeData }: IBarChart) {
     const svgHeight = svgRef.current?.clientHeight || 0;
     const margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
-    const keys = Object.keys(activeData);
-    const values = Object.values(activeData);
+    const keys = Object.keys(chartData);
+    const values = Object.values(chartData);
 
     const xScale = scaleLinear()
       .domain([0, Math.max(...values)])
@@ -67,7 +67,7 @@ function BarChart({ activeData }: IBarChart) {
       .select<SVGGElement>('#axisY')
       .attr('transform', `translate(${margin.left},0)`)
       .call(axisLeft(yScale));
-  }, [activeData]);
+  }, [chartData]);
 
   return (
     <Container>
