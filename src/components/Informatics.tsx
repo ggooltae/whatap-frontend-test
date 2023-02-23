@@ -5,13 +5,14 @@ import api from '../api';
 import type { SpotData } from '../customTypes';
 
 interface IInformatics {
+  title: string;
   informData: SpotData;
 }
 
-function Informatics({ informData }: IInformatics) {
+function Informatics({ title, informData }: IInformatics) {
   return (
     <Container>
-      <h3>Informatics</h3>
+      <h3>{title}</h3>
       {Object.keys(informData).map((key) => (
         <div key={key}>{`${api.OPEN_API[''][key]}: ${informData[key]}`}</div>
       ))}

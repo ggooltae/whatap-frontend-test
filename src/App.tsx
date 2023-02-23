@@ -1,14 +1,14 @@
-import { useState } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 
 import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
+
 import useSpotFetch from './hooks/useSpotFetch';
+import useProjectFetch from './hooks/useProjectFetch';
 
 import api from './api';
 import { TIME } from './config/constants';
-import type { ProjectData } from './customTypes';
 
 function App() {
   const { data: informData } = useSpotFetch({
@@ -19,6 +19,7 @@ function App() {
 
   const {
     data: activeData,
+    isPaused: isActiveIntervalPaused,
     pauseInterval: pauseActiveInterval,
     resumeInterval: resumeActiveInterval,
   } = useSpotFetch({
@@ -27,30 +28,37 @@ function App() {
     includeInterval: true,
   });
 
-  const [TPSData, setTPSData] = useState<ProjectData>([]);
+  const {
+    data: TPSData,
+    isPaused: isTPSIntervalPaused,
+    pauseInterval: pauseTPSInterval,
+    resumeInterval: resumeTPSInterval,
+  } = useProjectFetch({
+    type: 'app_counter',
+    key: 'tps',
+    intervalTime: TIME.INTERVAL_DELAY,
+  });
 
   return (
     <>
       <Global />
       <GridContainer>
         <Title>Application Monitoring Dashboard</Title>
-        <button
-          onClick={() => {
-            pauseActiveInterval();
-          }}
-        >
-          active status fetch 중단
-        </button>{' '}
-        <button
-          onClick={() => {
-            resumeActiveInterval();
-          }}
-        >
-          active status fetch 재개
-        </button>
-        <Informatics informData={informData} />
-        <BarChart chartData={activeData} />
-        <LineChart chartData={TPSData} />
+        <Informatics title={'Informatics'} informData={informData} />
+        <BarChart
+          title={'Active Status'}
+          chartData={activeData}
+          isPaused={isActiveIntervalPaused}
+          pauseInterval={pauseActiveInterval}
+          resumeInterval={resumeActiveInterval}
+        />
+        <LineChart
+          title={'평균 TPS'}
+          chartData={TPSData}
+          isPaused={isTPSIntervalPaused}
+          pauseInterval={pauseTPSInterval}
+          resumeInterval={resumeTPSInterval}
+        />
       </GridContainer>
     </>
   );

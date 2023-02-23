@@ -56,7 +56,7 @@ function useSpotFetch({ keys, intervalTime, includeInterval }: IUseSpotFetch) {
     setIsPaused(false);
   }
 
-  return { data, pauseInterval, resumeInterval };
+  return { data, isPaused, pauseInterval, resumeInterval };
 }
 
 export default useSpotFetch;

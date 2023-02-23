@@ -8,11 +8,25 @@ import styled from 'styled-components';
 import type { SpotData } from '../customTypes';
 
 interface IBarChart {
+  title: string;
   chartData: SpotData;
+  isPaused: boolean;
+  pauseInterval: () => void;
+  resumeInterval: () => void;
 }
 
-function BarChart({ chartData }: IBarChart) {
+function BarChart({
+  title,
+  chartData,
+  isPaused,
+  pauseInterval,
+  resumeInterval,
+}: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
+
+  function handleButtonClick() {
+    isPaused ? resumeInterval() : pauseInterval();
+  }
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -71,7 +85,8 @@ function BarChart({ chartData }: IBarChart) {
 
   return (
     <Container>
-      <h3>Active Status</h3>
+      <h3>{title}</h3>
+      <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
       <SVG ref={svgRef}>
         <g id="axisY" />
       </SVG>

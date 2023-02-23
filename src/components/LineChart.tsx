@@ -9,11 +9,25 @@ import styled from 'styled-components';
 import { ProjectData, TimeData } from '../customTypes';
 
 interface ILineChart {
-  TPSData: ProjectData;
+  title: string;
+  chartData: ProjectData;
+  isPaused: boolean;
+  pauseInterval: () => void;
+  resumeInterval: () => void;
 }
 
-function LineChart({ TPSData }: ILineChart) {
+function LineChart({
+  title,
+  chartData,
+  isPaused,
+  pauseInterval,
+  resumeInterval,
+}: ILineChart) {
   const svgRef = useRef<SVGSVGElement>(null);
+
+  function handleButtonClick() {
+    isPaused ? resumeInterval() : pauseInterval();
+  }
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -25,12 +39,12 @@ function LineChart({ TPSData }: ILineChart) {
 
     const xScale = scaleTime()
       .domain([
-        Math.min(...TPSData.map((obj) => Number(obj.time))),
-        Math.max(...TPSData.map((obj) => Number(obj.time))),
+        Math.min(...chartData.map((obj) => Number(obj.time))),
+        Math.max(...chartData.map((obj) => Number(obj.time))),
       ])
       .range([0, chartWidth]);
     const yScale = scaleLinear()
-      .domain([0, Math.max(...TPSData.map((obj) => Number(obj.data)))])
+      .domain([0, Math.max(...chartData.map((obj) => Number(obj.data)))])
       .range([chartHeight, margin.bottom]);
 
     const valueLine = line<TimeData>()
@@ -40,7 +54,7 @@ function LineChart({ TPSData }: ILineChart) {
     svg
       .select('#chart')
       .attr('transform', `translate(${margin.left},0)`)
-      .data([TPSData])
+      .data([chartData])
       .attr('fill', 'none')
       .attr('stroke', 'steelblue')
       .attr('stroke-width', 1.5)
@@ -55,11 +69,12 @@ function LineChart({ TPSData }: ILineChart) {
       .select<SVGGElement>('#axisY')
       .attr('transform', `translate(${margin.left},0)`)
       .call(axisLeft(yScale));
-  }, [TPSData]);
+  }, [chartData]);
 
   return (
     <Container>
-      <h3>평균 TPS</h3>
+      <h3>{title}</h3>
+      <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
       <SVG ref={svgRef}>
         <path id="chart" />
         <g id="axisX" />
