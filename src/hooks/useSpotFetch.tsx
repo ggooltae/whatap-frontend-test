@@ -11,7 +11,7 @@ interface IUseSpotFetch {
 function useSpotFetch({ keys, intervalTime, includeInterval }: IUseSpotFetch) {
   const [data, setData] = useState<SpotData>({});
   const [isPaused, setIsPaused] = useState(false);
-  const [isError, setIsError] = useState(true);
+  const [isError, setIsError] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
   async function getSpotData() {
