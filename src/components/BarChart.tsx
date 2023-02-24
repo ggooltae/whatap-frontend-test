@@ -5,10 +5,12 @@ import { axisLeft } from 'd3-axis';
 import 'd3-transition';
 import styled from 'styled-components';
 
-import type { SpotData } from '../customTypes';
+import type { SpotData } from '../config/types';
+import { IGridContainer } from '../config/interfaces';
 
 interface IBarChart {
   title: string;
+  gridArea: string;
   chartData: SpotData;
   isPaused: boolean;
   pauseInterval: () => void;
@@ -17,6 +19,7 @@ interface IBarChart {
 
 function BarChart({
   title,
+  gridArea,
   chartData,
   isPaused,
   pauseInterval,
@@ -84,7 +87,7 @@ function BarChart({
   }, [chartData]);
 
   return (
-    <Container>
+    <Container gridArea={gridArea}>
       <h3>{title}</h3>
       <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
       <SVG ref={svgRef}>
@@ -94,8 +97,8 @@ function BarChart({
   );
 }
 
-const Container = styled.div`
-  grid-area: c;
+const Container = styled.div<IGridContainer>`
+  grid-area: ${(props) => props.gridArea};
   display: flex;
   flex-direction: column;
   align-items: center;

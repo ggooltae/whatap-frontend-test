@@ -6,11 +6,13 @@ import { line } from 'd3-shape';
 import 'd3-transition';
 import styled from 'styled-components';
 
-import { ProjectData, TimeData } from '../customTypes';
+import { SeriesData, PointTimeData } from '../config/types';
+import { IGridContainer } from '../config/interfaces';
 
 interface ILineChart {
   title: string;
-  chartData: ProjectData;
+  gridArea: string;
+  chartData: SeriesData;
   isPaused: boolean;
   pauseInterval: () => void;
   resumeInterval: () => void;
@@ -18,6 +20,7 @@ interface ILineChart {
 
 function LineChart({
   title,
+  gridArea,
   chartData,
   isPaused,
   pauseInterval,
@@ -44,10 +47,10 @@ function LineChart({
       ])
       .range([0, chartWidth]);
     const yScale = scaleLinear()
-      .domain([0, Math.max(...chartData.map((obj) => Number(obj.data)))])
+      .domain([0, Math.max(...chartData.map((obj) => Number(obj.data))) * 1.2])
       .range([chartHeight, margin.bottom]);
 
-    const valueLine = line<TimeData>()
+    const valueLine = line<PointTimeData>()
       .x((d) => xScale(d.time))
       .y((d) => yScale(Number(d.data)));
 
@@ -72,7 +75,7 @@ function LineChart({
   }, [chartData]);
 
   return (
-    <Container>
+    <Container gridArea={gridArea}>
       <h3>{title}</h3>
       <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
       <SVG ref={svgRef}>
@@ -84,8 +87,8 @@ function LineChart({
   );
 }
 
-const Container = styled.div`
-  grid-area: d;
+const Container = styled.div<IGridContainer>`
+  grid-area: ${(props) => props.gridArea};
   display: flex;
   flex-direction: column;
   justify-content: center;

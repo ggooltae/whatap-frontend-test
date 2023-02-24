@@ -2,16 +2,18 @@ import React from 'react';
 import styled from 'styled-components';
 
 import api from '../api';
-import type { SpotData } from '../customTypes';
+import type { SpotData } from '../config/types';
+import { IGridContainer } from '../config/interfaces';
 
 interface IInformatics {
   title: string;
+  gridArea: string;
   informData: SpotData;
 }
 
-function Informatics({ title, informData }: IInformatics) {
+function Informatics({ title, gridArea, informData }: IInformatics) {
   return (
-    <Container>
+    <Container gridArea={gridArea}>
       <h3>{title}</h3>
       {Object.keys(informData).map((key) => (
         <div key={key}>{`${api.OPEN_API[''][key]}: ${informData[key]}`}</div>
@@ -20,8 +22,8 @@ function Informatics({ title, informData }: IInformatics) {
   );
 }
 
-const Container = styled.div`
-  grid-area: b;
+const Container = styled.div<IGridContainer>`
+  grid-area: ${(props) => props.gridArea};
   display: flex;
   flex-direction: column;
   justify-content: space-around;
