@@ -9,11 +9,14 @@ import styled from 'styled-components';
 import { SeriesData, PointTimeData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
+import { MESSAGE } from '../config/constants';
+
 interface ILineChart {
   title: string;
   gridArea: string;
   chartData: SeriesData;
   isPaused: boolean;
+  isError: boolean;
   pauseInterval: () => void;
   resumeInterval: () => void;
 }
@@ -23,6 +26,7 @@ function LineChart({
   gridArea,
   chartData,
   isPaused,
+  isError,
   pauseInterval,
   resumeInterval,
 }: ILineChart) {
@@ -74,7 +78,9 @@ function LineChart({
       .call(axisLeft(yScale));
   }, [chartData]);
 
-  return (
+  return isError ? (
+    <h1>{MESSAGE.FETCH_ERROR}</h1>
+  ) : (
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>

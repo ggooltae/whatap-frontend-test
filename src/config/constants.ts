@@ -5,6 +5,6 @@ export const TIME = {
   INTERVAL_DELAY: 5000,
 };
 
-export const SIZE = {
-  PROJECT_DATA_SIZE_LIMIT: (10 * TIME.MINUTE) / (5 * TIME.SECOND),
+export const MESSAGE = {
+  FETCH_ERROR: 'fetch 에러 발생, 잠시 기다려주세요.',
 };

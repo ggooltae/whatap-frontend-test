@@ -5,14 +5,19 @@ import api from '../api';
 import type { SpotData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
+import { MESSAGE } from '../config/constants';
+
 interface IInformatics {
   title: string;
   gridArea: string;
   informData: SpotData;
+  isError: boolean;
 }
 
-function Informatics({ title, gridArea, informData }: IInformatics) {
-  return (
+function Informatics({ title, gridArea, informData, isError }: IInformatics) {
+  return isError ? (
+    <h1>{MESSAGE.FETCH_ERROR}</h1>
+  ) : (
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       {Object.keys(informData).map((key) => (

@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
 
 import api from '../api';
-import type { SpotData } from '../customTypes';
+import type { SpotData } from '../config/types';
 
 interface IUseSpotFetch {
   keys: string[];
   intervalTime: number;
   includeInterval: boolean;
 }
-
 function useSpotFetch({ keys, intervalTime, includeInterval }: IUseSpotFetch) {
   const [data, setData] = useState<SpotData>({});
   const [isPaused, setIsPaused] = useState(false);
+  const [isError, setIsError] = useState(true);
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
   async function getSpotData() {
@@ -25,8 +25,10 @@ function useSpotFetch({ keys, intervalTime, includeInterval }: IUseSpotFetch) {
       }
 
       setData(newSpotData);
+      setIsError(false);
     } catch (error) {
       console.error('Error fetching spot data:', error);
+      setIsError(true);
     }
   }
 
@@ -56,7 +58,7 @@ function useSpotFetch({ keys, intervalTime, includeInterval }: IUseSpotFetch) {
     setIsPaused(false);
   }
 
-  return { data, isPaused, pauseInterval, resumeInterval };
+  return { data, isPaused, isError, pauseInterval, resumeInterval };
 }
 
 export default useSpotFetch;

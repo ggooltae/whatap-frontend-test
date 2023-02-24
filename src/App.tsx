@@ -6,37 +6,53 @@ import LineChart from './components/LineChart';
 
 import useSpotFetch from './hooks/useSpotFetch';
 import useProjectFetch from './hooks/useProjectFetch';
+import useSeriesFetch from './hooks/useSeriesFetch';
 
 import api from './api';
 import { TIME } from './config/constants';
 
 function App() {
-  const { data: informData } = useSpotFetch({
+  const { data: informData, isError: isInformDataError } = useSpotFetch({
     keys: api.INFORM_KEYS,
-    intervalTime: TIME.INTERVAL_DELAY,
+
+    intervalTime: 5 * TIME.SECOND,
     includeInterval: false,
   });
 
   const {
-    data: activeData,
-    isPaused: isActiveIntervalPaused,
-    pauseInterval: pauseActiveInterval,
-    resumeInterval: resumeActiveInterval,
+    data: activeStatusData,
+    isPaused: isActiveStatusIntervalPaused,
+    isError: isActiveStatusError,
+    pauseInterval: pauseActiveStatusInterval,
+    resumeInterval: resumeActiveStatusInterval,
   } = useSpotFetch({
     keys: api.ACTIVE_KEYS,
-    intervalTime: TIME.INTERVAL_DELAY,
+    intervalTime: 5 * TIME.SECOND,
     includeInterval: true,
   });
 
   const {
     data: TPSData,
     isPaused: isTPSIntervalPaused,
+    isError: isTPSError,
     pauseInterval: pauseTPSInterval,
     resumeInterval: resumeTPSInterval,
   } = useProjectFetch({
     type: 'app_counter',
     key: 'tps',
-    intervalTime: TIME.INTERVAL_DELAY,
+    intervalTime: 5 * TIME.SECOND,
+    timeRange: TIME.MINUTE,
+  });
+
+  const {
+    data: activeUserData,
+    isPaused: isActiveUserIntervalPaused,
+    isError: isActiveUserError,
+    pauseInterval: pauseActiveUserInterval,
+    resumeInterval: resumeActiveUserInterval,
+  } = useSeriesFetch({
+    key: 'visitor_5m',
+    intervalTime: TIME.MINUTE,
   });
 
   return (
@@ -44,20 +60,38 @@ function App() {
       <Global />
       <GridContainer>
         <Title>Application Monitoring Dashboard</Title>
-        <Informatics title={'Informatics'} informData={informData} />
+        <Informatics
+          title={'Informatics'}
+          gridArea={'b'}
+          informData={informData}
+          isError={isInformDataError}
+        />
         <BarChart
           title={'Active Status'}
-          chartData={activeData}
-          isPaused={isActiveIntervalPaused}
-          pauseInterval={pauseActiveInterval}
-          resumeInterval={resumeActiveInterval}
+          gridArea={'c'}
+          chartData={activeStatusData}
+          isPaused={isActiveStatusIntervalPaused}
+          isError={isActiveStatusError}
+          pauseInterval={pauseActiveStatusInterval}
+          resumeInterval={resumeActiveStatusInterval}
         />
         <LineChart
           title={'평균 TPS'}
+          gridArea={'d'}
           chartData={TPSData}
           isPaused={isTPSIntervalPaused}
+          isError={isTPSError}
           pauseInterval={pauseTPSInterval}
           resumeInterval={resumeTPSInterval}
+        />
+        <LineChart
+          title={'Active User'}
+          gridArea={'e'}
+          chartData={activeUserData}
+          isPaused={isActiveUserIntervalPaused}
+          isError={isActiveUserError}
+          pauseInterval={pauseActiveUserInterval}
+          resumeInterval={resumeActiveUserInterval}
         />
       </GridContainer>
     </>
@@ -83,7 +117,7 @@ const GridContainer = styled.div`
   grid-template-areas:
     'a a'
     'b c'
-    'd d';
+    'd e';
   padding: 3rem;
 `;
 

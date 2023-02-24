@@ -8,11 +8,14 @@ import styled from 'styled-components';
 import type { SpotData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
+import { MESSAGE } from '../config/constants';
+
 interface IBarChart {
   title: string;
   gridArea: string;
   chartData: SpotData;
   isPaused: boolean;
+  isError: boolean;
   pauseInterval: () => void;
   resumeInterval: () => void;
 }
@@ -22,6 +25,7 @@ function BarChart({
   gridArea,
   chartData,
   isPaused,
+  isError,
   pauseInterval,
   resumeInterval,
 }: IBarChart) {
@@ -86,7 +90,9 @@ function BarChart({
       .call(axisLeft(yScale));
   }, [chartData]);
 
-  return (
+  return isError ? (
+    <h1>{MESSAGE.FETCH_ERROR}</h1>
+  ) : (
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
