@@ -29,7 +29,7 @@ const OPEN_API: Record<string, Record<string, string>> = {
     act_socket: '액티브 Socket 수',
   },
   json: {
-    'exception/{stime}/{etime}': 'Exception 발생 ',
+    'visitor_5m/{stime}/{etime}': '5분위 방문자',
   },
   raw: {
     'tag/app_counter/tps?stime={stime}&etime={etime}&timeMerge={timeMerge}':
