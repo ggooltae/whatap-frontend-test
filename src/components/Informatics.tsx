@@ -22,9 +22,7 @@ function Informatics({ title, gridArea, informData, isError }: IInformatics) {
         <h2>{MESSAGE.FETCH_ERROR}</h2>
       ) : (
         Object.keys(informData).map((key) => (
-          <div key={key}>{`${
-            api.OPEN_API[''][key] || api.RESPONSE_FIELD_DESC[key]
-          }: ${informData[key]}`}</div>
+          <div key={key}>{`${api.OPEN_API[''][key]}: ${informData[key]}`}</div>
         ))
       )}
     </Container>

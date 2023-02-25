@@ -12,12 +12,16 @@ import api from './api';
 import { TIME } from './config/constants';
 
 function App() {
-  const { data: informData, isError: isInformDataError } = useSpotFetch({
-    keys: api.INFORM_KEYS,
-
-    intervalTime: 5 * TIME.SECOND,
+  const { data: appInformData, isError: isAppInformDataError } = useSpotFetch({
+    keys: api.APP_INFORM_KEYS,
     includeInterval: false,
   });
+  const { data: projectInformData, isError: isProjectInformDataError } =
+    useSpotFetch({
+      keys: api.DBC_INFORM_KEYS,
+      intervalTime: 5 * TIME.SECOND,
+      includeInterval: true,
+    });
 
   const {
     data: activeStatusData,
@@ -61,14 +65,20 @@ function App() {
       <GridContainer>
         <Title>Application Monitoring Dashboard</Title>
         <Informatics
-          title={'Informatics'}
+          title={'App Informatics'}
           gridArea={'b'}
-          informData={informData}
-          isError={isInformDataError}
+          informData={appInformData}
+          isError={isAppInformDataError}
+        />
+        <Informatics
+          title={'DBC Informatics'}
+          gridArea={'c'}
+          informData={projectInformData}
+          isError={isProjectInformDataError}
         />
         <BarChart
           title={'Active Status'}
-          gridArea={'c'}
+          gridArea={'d'}
           chartData={activeStatusData}
           isPaused={isActiveStatusIntervalPaused}
           isError={isActiveStatusError}
@@ -77,7 +87,7 @@ function App() {
         />
         <LineChart
           title={'평균 TPS'}
-          gridArea={'d'}
+          gridArea={'f'}
           chartData={TPSData}
           isPaused={isTPSIntervalPaused}
           isError={isTPSError}
@@ -86,7 +96,7 @@ function App() {
         />
         <LineChart
           title={'Active User'}
-          gridArea={'e'}
+          gridArea={'g'}
           chartData={activeUserData}
           isPaused={isActiveUserIntervalPaused}
           isError={isActiveUserError}
@@ -117,7 +127,8 @@ const GridContainer = styled.div`
   grid-template-areas:
     'a a'
     'b c'
-    'd e';
+    'd e'
+    'f g';
   padding: 3rem;
 `;
 

@@ -19,9 +19,9 @@ const OPEN_API: Record<string, Record<string, string>> = {
     cpu: 'CPU 사용률',
     threadpool_active: '쓰레드풀 활성 쓰레드 수',
     threadpool_queue: '쓰레드풀 큐잉 쓰레드 수',
-    dbc_count: '전체 DB Connection 수',
-    dbc_active: '활성(Active) DB Connection 수',
-    dbc_idle: '비활성(Idle) DB Connection 수',
+    dbconn_total: '전체 DB Connection 수',
+    dbconn_act: '활성(Active) DB Connection 수',
+    dbconn_idle: '비활성(Idle) DB Connection 수',
     act_method: '액티브 Method 수',
     act_sql: '액티브 SQL 수',
     act_httpc: '액티브 HTTP Call 수',
@@ -36,7 +36,13 @@ const OPEN_API: Record<string, Record<string, string>> = {
       '프로젝트 TPS',
   },
 };
-const INFORM_KEYS: string[] = ['act_agent', 'inact_agent', 'cpucore', 'host'];
+const APP_INFORM_KEYS: string[] = [
+  'act_agent',
+  'inact_agent',
+  'cpucore',
+  'host',
+];
+const DBC_INFORM_KEYS: string[] = ['dbconn_total', 'dbconn_act', 'dbconn_idle'];
 const ACTIVE_KEYS: string[] = [
   'act_method',
   'act_sql',
@@ -82,4 +88,12 @@ const spot = getOpenApi('');
 const series = getOpenApi('json');
 const project = getOpenApi('raw');
 
-export default { spot, series, project, OPEN_API, INFORM_KEYS, ACTIVE_KEYS };
+export default {
+  spot,
+  series,
+  project,
+  OPEN_API,
+  APP_INFORM_KEYS,
+  DBC_INFORM_KEYS,
+  ACTIVE_KEYS,
+};
