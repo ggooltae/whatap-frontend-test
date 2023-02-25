@@ -44,9 +44,9 @@ function BarChart({
 
     const xScale = scaleLinear()
       .domain([0, Math.max(...values)])
-      .range([0, svgWidth - margin.left - margin.right - 10]);
+      .range([0, svgWidth - margin.left - margin.right - 20]);
     const yScale = scaleBand()
-      .domain(keys.map((key) => key.replace('act_', '').toUpperCase()))
+      .domain(keys.map((key) => key.replace(/\w+_/, '').toUpperCase()))
       .range([margin.top, svgHeight - margin.bottom])
       .padding(0.1);
 
@@ -57,7 +57,7 @@ function BarChart({
       .attr('x', margin.left)
       .attr(
         'y',
-        (_, i) => yScale(keys[i].replace('act_', '').toUpperCase()) || 0,
+        (_, i) => yScale(keys[i].replace(/\w+_/, '').toUpperCase()) || 0,
       )
       .attr('fill', 'steelblue')
       .attr('height', yScale.bandwidth())
@@ -73,10 +73,10 @@ function BarChart({
       .attr(
         'y',
         (_, i) =>
-          (yScale(keys[i].replace('act_', '').toUpperCase()) || 0) +
-          yScale.bandwidth() * 0.8,
+          (yScale(keys[i].replace(/\w+_/, '').toUpperCase()) || 0) +
+          yScale.bandwidth() / 2,
       )
-      .attr('fill', 'black')
+      .attr('dy', '0.35em')
       .transition()
       .duration(1000)
       .text((d) => d)
