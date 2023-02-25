@@ -6,14 +6,9 @@ import { TIME } from '../config/constants';
 
 interface IUseSpotFetch {
   keys: string[];
-  intervalTime?: number;
   includeInterval: boolean;
 }
-function useSpotFetch({
-  keys,
-  intervalTime = 5 * TIME.SECOND,
-  includeInterval,
-}: IUseSpotFetch) {
+function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
   const [data, setData] = useState<SpotData>({});
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -33,7 +28,6 @@ function useSpotFetch({
       setIsError(false);
     } catch (error) {
       console.error('Error fetching spot data:', error);
-
       setIsError(true);
     }
   }
@@ -45,7 +39,7 @@ function useSpotFetch({
       getSpotData();
 
       if (includeInterval) {
-        const id = setInterval(getSpotData, intervalTime);
+        const id = setInterval(getSpotData, 5 * TIME.SECOND);
 
         setIntervalId(id);
       }

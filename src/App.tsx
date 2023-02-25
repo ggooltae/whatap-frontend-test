@@ -24,7 +24,6 @@ function App() {
     resumeInterval: resumeCpuDataInterval,
   } = useSpotFetch({
     keys: api.CPU_USAGE_KEY,
-    intervalTime: 5 * TIME.SECOND,
     includeInterval: true,
   });
 
@@ -36,7 +35,6 @@ function App() {
     resumeInterval: resumeActiveStatusInterval,
   } = useSpotFetch({
     keys: api.ACTIVE_KEYS,
-    intervalTime: 5 * TIME.SECOND,
     includeInterval: true,
   });
 
@@ -48,7 +46,6 @@ function App() {
     resumeInterval: resumeDbcStatusInterval,
   } = useSpotFetch({
     keys: api.DBC_STATUS_KEYS,
-    intervalTime: 5 * TIME.SECOND,
     includeInterval: true,
   });
 
@@ -61,7 +58,6 @@ function App() {
   } = useProjectFetch({
     type: 'app_counter',
     key: 'tps',
-    intervalTime: 5 * TIME.SECOND,
     timeRange: TIME.MINUTE,
   });
 
@@ -73,7 +69,7 @@ function App() {
     resumeInterval: resumeActiveUserInterval,
   } = useSeriesFetch({
     key: 'visitor_5m',
-    intervalTime: TIME.MINUTE,
+    intervalTime: 5 * TIME.MINUTE,
   });
 
   return (
