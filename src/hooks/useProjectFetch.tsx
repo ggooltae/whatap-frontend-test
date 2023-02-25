@@ -1,41 +1,42 @@
 import { useState, useRef, useEffect } from 'react';
 
 import api from '../api';
-import type { SeriesData } from '../config/types';
+import type { SeriesData, PointTimeData } from '../config/types';
+import { TIME } from '../config/constants';
 
 interface IUseProjectFetch {
   type: string;
   key: string;
-  intervalTime: number;
   timeRange: number;
 }
 
-function useProjectFetch({
-  type,
-  key,
-  intervalTime,
-  timeRange,
-}: IUseProjectFetch) {
+function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
   const [data, setData] = useState<SeriesData>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
-  const dataRef = useRef<SeriesData>([]);
+  const cache = useRef<Map<string, PointTimeData>>(new Map());
 
-  const maxDataSize = timeRange / intervalTime;
+  const maxDataSize = timeRange / (5 * TIME.SECOND);
 
   async function getProjectData(type: string, key: string) {
-    const currentTime = Date.now();
+    const currentTime = Date.now() - (Date.now() % (5 * TIME.SECOND));
 
     try {
-      if (dataRef.current.length === 0) {
-        const newProjectData: SeriesData = [];
+      const newProjectData: SeriesData = [];
 
-        for (let i = maxDataSize; i > 0; i--) {
-          const stime = (currentTime - intervalTime * i).toString();
-          const etime = (currentTime - intervalTime * (i - 1)).toString();
-          const timeMerge = 'avg';
+      for (let i = maxDataSize; i > 0; i--) {
+        const stime = (currentTime - 5 * TIME.SECOND * i).toString();
+        const etime = (currentTime - 5 * TIME.SECOND * (i - 1)).toString();
+        const timeMerge = 'avg';
+        const cachedData = cache.current.get(
+          `stime=${stime}/etime=${etime}/timeMerge=${timeMerge}`,
+        );
+
+        if (cachedData) {
+          newProjectData.push(cachedData);
+        } else {
           const response = await api.project(
             `tag/${type}/${key}?stime={stime}&etime={etime}&timeMerge={timeMerge}`,
             {
@@ -45,45 +46,26 @@ function useProjectFetch({
             },
           );
 
-          newProjectData.push({
-            time: currentTime - intervalTime * (i - 1),
+          const pointTimeData = {
+            time: currentTime - 5 * TIME.SECOND * (i - 1),
             data: response.data,
-          });
+          };
+
+          cache.current.set(
+            `stime=${stime}/etime=${etime}/timeMerge=${timeMerge}`,
+            pointTimeData,
+          );
+          newProjectData.push(pointTimeData);
         }
-
-        setData(newProjectData);
-      } else {
-        const copiedData = dataRef.current.slice();
-        const recentTime = copiedData[copiedData.length - 1].time;
-        const response = await api.project(
-          `tag/${type}/${key}?stime={stime}&etime={etime}&timeMerge={timeMerge}`,
-          {
-            stime: recentTime.toString(),
-            etime: (recentTime + intervalTime).toString(),
-            timeMerge: 'avg',
-          },
-        );
-
-        copiedData.shift();
-        copiedData.push({
-          time: recentTime + intervalTime,
-          data: response.data,
-        });
-
-        setData(copiedData);
       }
 
+      setData(newProjectData);
       setIsError(false);
     } catch (error) {
       console.error('Error fetching project data:', error);
-
       setIsError(true);
     }
   }
-
-  useEffect(() => {
-    dataRef.current = data;
-  }, [data]);
 
   useEffect(() => {
     if (isPaused) {
@@ -91,7 +73,7 @@ function useProjectFetch({
     } else {
       getProjectData(type, key);
 
-      const id = setInterval(() => getProjectData(type, key), intervalTime);
+      const id = setInterval(() => getProjectData(type, key), 5 * TIME.SECOND);
 
       setIntervalId(id);
     }
