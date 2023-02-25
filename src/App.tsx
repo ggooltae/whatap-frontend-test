@@ -17,13 +17,13 @@ function App() {
     includeInterval: false,
   });
   const {
-    data: dbcInformData,
-    isPaused: isDbcDataIntervalPaused,
-    isError: isDbcInformDataError,
-    pauseInterval: pauseDbcDataInterval,
-    resumeInterval: resumeDbcDataInterval,
+    data: cpuInformData,
+    isPaused: isCpuDataIntervalPaused,
+    isError: isCpuInformDataError,
+    pauseInterval: pauseCpuDataInterval,
+    resumeInterval: resumeCpuDataInterval,
   } = useSpotFetch({
-    keys: api.DBC_INFORM_KEYS,
+    keys: api.CPU_USAGE_KEY,
     intervalTime: 5 * TIME.SECOND,
     includeInterval: true,
   });
@@ -36,6 +36,18 @@ function App() {
     resumeInterval: resumeActiveStatusInterval,
   } = useSpotFetch({
     keys: api.ACTIVE_KEYS,
+    intervalTime: 5 * TIME.SECOND,
+    includeInterval: true,
+  });
+
+  const {
+    data: dbcStatusData,
+    isPaused: isDbcStatusIntervalPaused,
+    isError: isDbcStatusError,
+    pauseInterval: pauseDbcStatusInterval,
+    resumeInterval: resumeDbcStatusInterval,
+  } = useSpotFetch({
+    keys: api.DBC_STATUS_KEYS,
     intervalTime: 5 * TIME.SECOND,
     includeInterval: true,
   });
@@ -76,13 +88,13 @@ function App() {
           isError={isAppInformDataError}
         />
         <Informatics
-          title={'DBC Informatics'}
+          title={'CPU Informatics'}
           gridArea={'c'}
-          informData={dbcInformData}
-          isPaused={isDbcDataIntervalPaused}
-          isError={isDbcInformDataError}
-          pauseInterval={pauseDbcDataInterval}
-          resumeInterval={resumeDbcDataInterval}
+          informData={cpuInformData}
+          isPaused={isCpuDataIntervalPaused}
+          isError={isCpuInformDataError}
+          pauseInterval={pauseCpuDataInterval}
+          resumeInterval={resumeCpuDataInterval}
         />
         <BarChart
           title={'Active Status'}
@@ -92,6 +104,15 @@ function App() {
           isError={isActiveStatusError}
           pauseInterval={pauseActiveStatusInterval}
           resumeInterval={resumeActiveStatusInterval}
+        />
+        <BarChart
+          title={'DB Connection Status'}
+          gridArea={'e'}
+          chartData={dbcStatusData}
+          isPaused={isDbcStatusIntervalPaused}
+          isError={isDbcStatusError}
+          pauseInterval={pauseDbcStatusInterval}
+          resumeInterval={resumeDbcStatusInterval}
         />
         <LineChart
           title={'평균 TPS'}

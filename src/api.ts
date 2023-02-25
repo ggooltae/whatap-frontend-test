@@ -42,7 +42,7 @@ const APP_INFORM_KEYS: string[] = [
   'cpucore',
   'host',
 ];
-const DBC_INFORM_KEYS: string[] = ['dbconn_total', 'dbconn_act', 'dbconn_idle'];
+const CPU_USAGE_KEY: string[] = ['cpu'];
 const ACTIVE_KEYS: string[] = [
   'act_method',
   'act_sql',
@@ -50,6 +50,7 @@ const ACTIVE_KEYS: string[] = [
   'act_dbc',
   'act_socket',
 ];
+const DBC_STATUS_KEYS: string[] = ['dbconn_total', 'dbconn_act', 'dbconn_idle'];
 
 const getPath = (url: string, param: Record<string, string> = {}): string => {
   let path: string = url;
@@ -94,6 +95,7 @@ export default {
   project,
   OPEN_API,
   APP_INFORM_KEYS,
-  DBC_INFORM_KEYS,
+  CPU_USAGE_KEY,
   ACTIVE_KEYS,
+  DBC_STATUS_KEYS,
 };
