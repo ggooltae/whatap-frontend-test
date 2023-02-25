@@ -16,12 +16,17 @@ function App() {
     keys: api.APP_INFORM_KEYS,
     includeInterval: false,
   });
-  const { data: projectInformData, isError: isProjectInformDataError } =
-    useSpotFetch({
-      keys: api.DBC_INFORM_KEYS,
-      intervalTime: 5 * TIME.SECOND,
-      includeInterval: true,
-    });
+  const {
+    data: dbcInformData,
+    isPaused: isDbcDataIntervalPaused,
+    isError: isDbcInformDataError,
+    pauseInterval: pauseDbcDataInterval,
+    resumeInterval: resumeDbcDataInterval,
+  } = useSpotFetch({
+    keys: api.DBC_INFORM_KEYS,
+    intervalTime: 5 * TIME.SECOND,
+    includeInterval: true,
+  });
 
   const {
     data: activeStatusData,
@@ -73,8 +78,11 @@ function App() {
         <Informatics
           title={'DBC Informatics'}
           gridArea={'c'}
-          informData={projectInformData}
-          isError={isProjectInformDataError}
+          informData={dbcInformData}
+          isPaused={isDbcDataIntervalPaused}
+          isError={isDbcInformDataError}
+          pauseInterval={pauseDbcDataInterval}
+          resumeInterval={resumeDbcDataInterval}
         />
         <BarChart
           title={'Active Status'}

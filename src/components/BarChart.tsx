@@ -5,6 +5,8 @@ import { axisLeft } from 'd3-axis';
 import 'd3-transition';
 import styled from 'styled-components';
 
+import IntervalControlButton from './IntervalControlButton';
+
 import type { SpotData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
@@ -30,10 +32,6 @@ function BarChart({
   resumeInterval,
 }: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
-
-  function handleButtonClick() {
-    isPaused ? resumeInterval() : pauseInterval();
-  }
 
   useEffect(() => {
     const svg = select(svgRef.current);
@@ -94,12 +92,14 @@ function BarChart({
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       {isError ? (
-        <h2>{MESSAGE.FETCH_ERROR}</h2>
+        <h3>{MESSAGE.FETCH_ERROR}</h3>
       ) : (
         <>
-          <button onClick={handleButtonClick}>
-            {isPaused ? 'start' : 'stop'}
-          </button>
+          <IntervalControlButton
+            isPaused={isPaused}
+            resumeInterval={resumeInterval}
+            pauseInterval={pauseInterval}
+          />
           <SVG ref={svgRef}>
             <g id="axisY" />
           </SVG>

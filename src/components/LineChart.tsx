@@ -6,6 +6,8 @@ import { line } from 'd3-shape';
 import 'd3-transition';
 import styled from 'styled-components';
 
+import IntervalControlButton from './IntervalControlButton';
+
 import { SeriesData, PointTimeData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
@@ -32,10 +34,6 @@ function LineChart({
 }: ILineChart) {
   const svgRef = useRef<SVGSVGElement>(null);
 
-  function handleButtonClick() {
-    isPaused ? resumeInterval() : pauseInterval();
-  }
-
   useEffect(() => {
     const svg = select(svgRef.current);
     const svgWidth = svgRef.current?.clientWidth || 0;
@@ -51,7 +49,10 @@ function LineChart({
       ])
       .range([0, chartWidth]);
     const yScale = scaleLinear()
-      .domain([0, Math.max(...chartData.map((obj) => Number(obj.data))) * 1.2])
+      .domain([
+        Math.min(...chartData.map((obj) => Number(obj.data))) * 0.8,
+        Math.max(...chartData.map((obj) => Number(obj.data))) * 1.2,
+      ])
       .range([chartHeight, margin.bottom]);
 
     const valueLine = line<PointTimeData>()
@@ -85,9 +86,11 @@ function LineChart({
         <h2>{MESSAGE.FETCH_ERROR}</h2>
       ) : (
         <>
-          <button onClick={handleButtonClick}>
-            {isPaused ? 'start' : 'stop'}
-          </button>
+          <IntervalControlButton
+            isPaused={isPaused}
+            resumeInterval={resumeInterval}
+            pauseInterval={pauseInterval}
+          />{' '}
           <SVG ref={svgRef}>
             <path id="chart" />
             <g id="axisX" />
