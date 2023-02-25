@@ -15,14 +15,18 @@ interface IInformatics {
 }
 
 function Informatics({ title, gridArea, informData, isError }: IInformatics) {
-  return isError ? (
-    <h1>{MESSAGE.FETCH_ERROR}</h1>
-  ) : (
+  return (
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
-      {Object.keys(informData).map((key) => (
-        <div key={key}>{`${api.OPEN_API[''][key]}: ${informData[key]}`}</div>
-      ))}
+      {isError ? (
+        <h2>{MESSAGE.FETCH_ERROR}</h2>
+      ) : (
+        Object.keys(informData).map((key) => (
+          <div key={key}>{`${
+            api.OPEN_API[''][key] || api.RESPONSE_FIELD_DESC[key]
+          }: ${informData[key]}`}</div>
+        ))
+      )}
     </Container>
   );
 }
@@ -36,7 +40,6 @@ const Container = styled.div<IGridContainer>`
   padding: 1rem;
   border: 1px solid black;
   border-radius: 0.5rem;
-  background-color: white;
 `;
 
 export default React.memo(Informatics);

@@ -40,7 +40,7 @@ function LineChart({
     const svg = select(svgRef.current);
     const svgWidth = svgRef.current?.clientWidth || 0;
     const svgHeight = svgRef.current?.clientHeight || 0;
-    const margin = { top: 0, bottom: 20, left: 30, right: 20 };
+    const margin = { top: 0, bottom: 20, left: 40, right: 20 };
     const chartWidth = svgWidth - margin.left - margin.right;
     const chartHeight = svgHeight - margin.top - margin.bottom;
 
@@ -78,17 +78,23 @@ function LineChart({
       .call(axisLeft(yScale));
   }, [chartData]);
 
-  return isError ? (
-    <h1>{MESSAGE.FETCH_ERROR}</h1>
-  ) : (
+  return (
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
-      <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
-      <SVG ref={svgRef}>
-        <path id="chart" />
-        <g id="axisX" />
-        <g id="axisY" />
-      </SVG>
+      {isError ? (
+        <h2>{MESSAGE.FETCH_ERROR}</h2>
+      ) : (
+        <>
+          <button onClick={handleButtonClick}>
+            {isPaused ? 'start' : 'stop'}
+          </button>
+          <SVG ref={svgRef}>
+            <path id="chart" />
+            <g id="axisX" />
+            <g id="axisY" />
+          </SVG>
+        </>
+      )}
     </Container>
   );
 }

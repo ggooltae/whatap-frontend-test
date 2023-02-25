@@ -90,15 +90,21 @@ function BarChart({
       .call(axisLeft(yScale));
   }, [chartData]);
 
-  return isError ? (
-    <h1>{MESSAGE.FETCH_ERROR}</h1>
-  ) : (
+  return (
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
-      <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
-      <SVG ref={svgRef}>
-        <g id="axisY" />
-      </SVG>
+      {isError ? (
+        <h2>{MESSAGE.FETCH_ERROR}</h2>
+      ) : (
+        <>
+          <button onClick={handleButtonClick}>
+            {isPaused ? 'start' : 'stop'}
+          </button>
+          <SVG ref={svgRef}>
+            <g id="axisY" />
+          </SVG>
+        </>
+      )}
     </Container>
   );
 }
