@@ -8,3 +8,7 @@ export const TIME = {
 export const MESSAGE = {
   FETCH_ERROR: 'fetch 에러 발생, 5초 간격으로 재시도합니다.',
 };
+
+export const COLOR = {
+  BLUE: '#0066FF',
+};

@@ -144,7 +144,7 @@ const Container = styled.div<IGridContainer>`
 `;
 
 const SVG = styled.svg`
-  width: 80%;
+  width: 100%;
 `;
 
 export default BarChart;
