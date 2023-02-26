@@ -12,6 +12,7 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
   const [data, setData] = useState<SpotData>({});
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorCount, setErrorCount] = useState(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
   async function getSpotData() {
@@ -26,9 +27,15 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
 
       setData(newSpotData);
       setIsError(false);
+      setErrorCount(0);
     } catch (error) {
       console.error('Error fetching spot data:', error);
       setIsError(true);
+      setErrorCount((errorCount) => errorCount + 1);
+
+      if (!includeInterval) {
+        setTimeout(() => getSpotData(), 5 * TIME.SECOND);
+      }
     }
   }
 
@@ -58,7 +65,7 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
     setIsPaused(false);
   }
 
-  return { data, isPaused, isError, pauseInterval, resumeInterval };
+  return { data, isPaused, isError, errorCount, pauseInterval, resumeInterval };
 }
 
 export default useSpotFetch;

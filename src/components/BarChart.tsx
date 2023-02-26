@@ -5,6 +5,7 @@ import { axisLeft } from 'd3-axis';
 import 'd3-transition';
 import styled from 'styled-components';
 
+import ErrorBoundary from './ErrorBoundary';
 import IntervalControlButton from './IntervalControlButton';
 
 import type { SpotData } from '../config/types';
@@ -18,6 +19,7 @@ interface IBarChart {
   chartData: SpotData;
   isPaused: boolean;
   isError: boolean;
+  errorCount: number;
   pauseInterval: () => void;
   resumeInterval: () => void;
 }
@@ -28,6 +30,7 @@ function BarChart({
   chartData,
   isPaused,
   isError,
+  errorCount,
   pauseInterval,
   resumeInterval,
 }: IBarChart) {
@@ -92,7 +95,9 @@ function BarChart({
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       {isError ? (
-        <h3>{MESSAGE.FETCH_ERROR}</h3>
+        <ErrorBoundary
+          message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
+        />
       ) : (
         <>
           <IntervalControlButton

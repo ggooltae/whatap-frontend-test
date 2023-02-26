@@ -12,7 +12,11 @@ import api from './api';
 import { TIME } from './config/constants';
 
 function App() {
-  const { data: appInformData, isError: isAppInformDataError } = useSpotFetch({
+  const {
+    data: appInformData,
+    isError: isAppInformDataError,
+    errorCount: appInformDataErrorCount,
+  } = useSpotFetch({
     keys: api.APP_INFORM_KEYS,
     includeInterval: false,
   });
@@ -20,6 +24,7 @@ function App() {
     data: cpuInformData,
     isPaused: isCpuDataIntervalPaused,
     isError: isCpuInformDataError,
+    errorCount: cpuInformDataErrorCount,
     pauseInterval: pauseCpuDataInterval,
     resumeInterval: resumeCpuDataInterval,
   } = useSpotFetch({
@@ -31,6 +36,7 @@ function App() {
     data: activeStatusData,
     isPaused: isActiveStatusIntervalPaused,
     isError: isActiveStatusError,
+    errorCount: activeStatusErrorCount,
     pauseInterval: pauseActiveStatusInterval,
     resumeInterval: resumeActiveStatusInterval,
   } = useSpotFetch({
@@ -42,6 +48,7 @@ function App() {
     data: dbcStatusData,
     isPaused: isDbcStatusIntervalPaused,
     isError: isDbcStatusError,
+    errorCount: dbcStatusErrorCount,
     pauseInterval: pauseDbcStatusInterval,
     resumeInterval: resumeDbcStatusInterval,
   } = useSpotFetch({
@@ -53,6 +60,7 @@ function App() {
     data: TPSData,
     isPaused: isTPSIntervalPaused,
     isError: isTPSError,
+    errorCount: TPSErrorCount,
     pauseInterval: pauseTPSInterval,
     resumeInterval: resumeTPSInterval,
   } = useProjectFetch({
@@ -65,6 +73,7 @@ function App() {
     data: activeUserData,
     isPaused: isActiveUserIntervalPaused,
     isError: isActiveUserError,
+    errorCount: activeUserErrorCount,
     pauseInterval: pauseActiveUserInterval,
     resumeInterval: resumeActiveUserInterval,
   } = useSeriesFetch({
@@ -82,6 +91,7 @@ function App() {
           gridArea={'b'}
           informData={appInformData}
           isError={isAppInformDataError}
+          errorCount={appInformDataErrorCount}
         />
         <Informatics
           title={'CPU Informatics'}
@@ -89,6 +99,7 @@ function App() {
           informData={cpuInformData}
           isPaused={isCpuDataIntervalPaused}
           isError={isCpuInformDataError}
+          errorCount={cpuInformDataErrorCount}
           pauseInterval={pauseCpuDataInterval}
           resumeInterval={resumeCpuDataInterval}
         />
@@ -98,6 +109,7 @@ function App() {
           chartData={activeStatusData}
           isPaused={isActiveStatusIntervalPaused}
           isError={isActiveStatusError}
+          errorCount={activeStatusErrorCount}
           pauseInterval={pauseActiveStatusInterval}
           resumeInterval={resumeActiveStatusInterval}
         />
@@ -107,6 +119,7 @@ function App() {
           chartData={dbcStatusData}
           isPaused={isDbcStatusIntervalPaused}
           isError={isDbcStatusError}
+          errorCount={dbcStatusErrorCount}
           pauseInterval={pauseDbcStatusInterval}
           resumeInterval={resumeDbcStatusInterval}
         />
@@ -116,6 +129,7 @@ function App() {
           chartData={TPSData}
           isPaused={isTPSIntervalPaused}
           isError={isTPSError}
+          errorCount={TPSErrorCount}
           pauseInterval={pauseTPSInterval}
           resumeInterval={resumeTPSInterval}
         />
@@ -125,6 +139,7 @@ function App() {
           chartData={activeUserData}
           isPaused={isActiveUserIntervalPaused}
           isError={isActiveUserError}
+          errorCount={activeUserErrorCount}
           pauseInterval={pauseActiveUserInterval}
           resumeInterval={resumeActiveUserInterval}
         />

@@ -6,5 +6,5 @@ export const TIME = {
 };
 
 export const MESSAGE = {
-  FETCH_ERROR: 'fetch 에러 발생, 잠시 기다려주세요.',
+  FETCH_ERROR: 'fetch 에러 발생, 5초 간격으로 재시도합니다.',
 };

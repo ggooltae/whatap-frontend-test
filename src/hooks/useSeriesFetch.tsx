@@ -14,6 +14,7 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
   const [data, setData] = useState<SeriesData>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
+  const [errorCount, setErrorCount] = useState(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
   const cache = useRef<Map<string, SeriesData>>(new Map());
@@ -43,9 +44,11 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
       }
 
       setIsError(false);
+      setErrorCount(0);
     } catch (error) {
       console.error('Error fetching spot data:', error);
       setIsError(true);
+      setErrorCount((errorCount) => errorCount + 1);
     }
   }
 
@@ -73,7 +76,7 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
     setIsPaused(false);
   }
 
-  return { data, isPaused, isError, pauseInterval, resumeInterval };
+  return { data, isPaused, isError, errorCount, pauseInterval, resumeInterval };
 }
 
 export default useSeriesFetch;

@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import ErrorBoundary from './ErrorBoundary';
 import IntervalControlButton from './IntervalControlButton';
 
 import api from '../api';
@@ -14,6 +15,7 @@ interface IInformatics {
   gridArea: string;
   informData: SpotData;
   isError: boolean;
+  errorCount: number;
   isPaused?: boolean;
   pauseInterval?: () => void;
   resumeInterval?: () => void;
@@ -24,6 +26,7 @@ function Informatics({
   gridArea,
   informData,
   isError,
+  errorCount,
   isPaused,
   pauseInterval,
   resumeInterval,
@@ -32,7 +35,9 @@ function Informatics({
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       {isError ? (
-        <h2>{MESSAGE.FETCH_ERROR}</h2>
+        <ErrorBoundary
+          message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
+        />
       ) : (
         <>
           {isPaused !== undefined && resumeInterval && pauseInterval ? (

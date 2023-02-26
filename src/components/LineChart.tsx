@@ -6,6 +6,7 @@ import { line } from 'd3-shape';
 import 'd3-transition';
 import styled from 'styled-components';
 
+import ErrorBoundary from './ErrorBoundary';
 import IntervalControlButton from './IntervalControlButton';
 
 import { SeriesData, PointTimeData } from '../config/types';
@@ -19,6 +20,7 @@ interface ILineChart {
   chartData: SeriesData;
   isPaused: boolean;
   isError: boolean;
+  errorCount: number;
   pauseInterval: () => void;
   resumeInterval: () => void;
 }
@@ -29,6 +31,7 @@ function LineChart({
   chartData,
   isPaused,
   isError,
+  errorCount,
   pauseInterval,
   resumeInterval,
 }: ILineChart) {
@@ -83,7 +86,9 @@ function LineChart({
     <Container gridArea={gridArea}>
       <h3>{title}</h3>
       {isError ? (
-        <h2>{MESSAGE.FETCH_ERROR}</h2>
+        <ErrorBoundary
+          message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
+        />
       ) : (
         <>
           <IntervalControlButton
