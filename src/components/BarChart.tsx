@@ -1,8 +1,9 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { select } from 'd3-selection';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisLeft } from 'd3-axis';
 import 'd3-transition';
+import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
 import ErrorBoundary from './ErrorBoundary';
@@ -11,7 +12,7 @@ import IntervalControlButton from './IntervalControlButton';
 import type { SpotData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
-import { MESSAGE } from '../config/constants';
+import { MESSAGE, TIME } from '../config/constants';
 
 interface IBarChart {
   title: string;
@@ -35,11 +36,28 @@ function BarChart({
   resumeInterval,
 }: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [svgWidth, setSvgWidth] = useState(0);
+  const [svgHeight, setSvgHeight] = useState(0);
+
+  function getSvgSize() {
+    const newWidth = svgRef.current?.clientWidth || 0;
+    setSvgWidth(newWidth);
+
+    const newHeight = svgRef.current?.clientHeight || 0;
+    setSvgHeight(newHeight);
+  }
+
+  useEffect(() => {
+    const debouncedGetSvgSize = debounce(getSvgSize, TIME.RESIZE_DEBOUNCE_TIME);
+
+    getSvgSize();
+    window.addEventListener('resize', debouncedGetSvgSize);
+
+    return () => window.removeEventListener('resize', debouncedGetSvgSize);
+  }, []);
 
   useEffect(() => {
     const svg = select(svgRef.current);
-    const svgWidth = svgRef.current?.clientWidth || 0;
-    const svgHeight = svgRef.current?.clientHeight || 0;
     const margin = { top: 20, right: 20, bottom: 20, left: 50 };
 
     const keys = Object.keys(chartData);
@@ -89,7 +107,7 @@ function BarChart({
       .select<SVGGElement>('#axisY')
       .attr('transform', `translate(${margin.left},0)`)
       .call(axisLeft(yScale));
-  }, [chartData]);
+  }, [chartData, svgWidth, svgHeight]);
 
   return (
     <Container gridArea={gridArea}>

@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { select } from 'd3-selection';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { axisLeft, axisBottom } from 'd3-axis';
 import { line } from 'd3-shape';
 import 'd3-transition';
+import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
 import ErrorBoundary from './ErrorBoundary';
@@ -12,7 +13,7 @@ import IntervalControlButton from './IntervalControlButton';
 import { SeriesData, PointTimeData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
-import { MESSAGE } from '../config/constants';
+import { MESSAGE, TIME } from '../config/constants';
 
 interface ILineChart {
   title: string;
@@ -36,11 +37,28 @@ function LineChart({
   resumeInterval,
 }: ILineChart) {
   const svgRef = useRef<SVGSVGElement>(null);
+  const [svgWidth, setSvgWidth] = useState(0);
+  const [svgHeight, setSvgHeight] = useState(0);
+
+  function getSvgSize() {
+    const newWidth = svgRef.current?.clientWidth || 0;
+    setSvgWidth(newWidth);
+
+    const newHeight = svgRef.current?.clientHeight || 0;
+    setSvgHeight(newHeight);
+  }
+
+  useEffect(() => {
+    const debouncedGetSvgSize = debounce(getSvgSize, TIME.RESIZE_DEBOUNCE_TIME);
+
+    getSvgSize();
+    window.addEventListener('resize', debouncedGetSvgSize);
+
+    return () => window.removeEventListener('resize', debouncedGetSvgSize);
+  }, []);
 
   useEffect(() => {
     const svg = select(svgRef.current);
-    const svgWidth = svgRef.current?.clientWidth || 0;
-    const svgHeight = svgRef.current?.clientHeight || 0;
     const margin = { top: 0, bottom: 20, left: 40, right: 20 };
     const chartWidth = svgWidth - margin.left - margin.right;
     const chartHeight = svgHeight - margin.top - margin.bottom;
@@ -80,7 +98,7 @@ function LineChart({
       .select<SVGGElement>('#axisY')
       .attr('transform', `translate(${margin.left},0)`)
       .call(axisLeft(yScale));
-  }, [chartData]);
+  }, [chartData, svgWidth, svgHeight]);
 
   return (
     <Container gridArea={gridArea}>

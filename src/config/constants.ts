@@ -2,7 +2,7 @@ export const TIME = {
   SECOND: 1000,
   MINUTE: 1000 * 60,
   HOUR: 1000 * 60 * 60,
-  INTERVAL_DELAY: 5000,
+  RESIZE_DEBOUNCE_TIME: 500,
 };
 
 export const MESSAGE = {
