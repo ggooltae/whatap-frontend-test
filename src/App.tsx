@@ -168,6 +168,7 @@ const GridContainer = styled.div`
     'd e'
     'f g';
   padding: 2rem;
+  min-width: 500px;
 
   @media screen and (max-width: 800px) {
     display: flex;
