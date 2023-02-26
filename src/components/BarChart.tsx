@@ -6,8 +6,8 @@ import 'd3-transition';
 import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
+import WidgetHeader from './WidgetHeader';
 import ErrorBoundary from './ErrorBoundary';
-import IntervalControlButton from './IntervalControlButton';
 
 import type { SpotData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
@@ -58,7 +58,7 @@ function BarChart({
 
   useEffect(() => {
     const svg = select(svgRef.current);
-    const margin = { top: 20, right: 20, bottom: 20, left: 50 };
+    const margin = { top: 20, right: 20, bottom: 0, left: 50 };
 
     const keys = Object.keys(chartData);
     const values = Object.values(chartData);
@@ -111,22 +111,20 @@ function BarChart({
 
   return (
     <Container gridArea={gridArea}>
-      <h3>{title}</h3>
+      <WidgetHeader
+        title={title}
+        isPaused={isPaused}
+        resumeInterval={resumeInterval}
+        pauseInterval={pauseInterval}
+      />
       {isError ? (
         <ErrorBoundary
           message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
         />
       ) : (
-        <>
-          <IntervalControlButton
-            isPaused={isPaused}
-            resumeInterval={resumeInterval}
-            pauseInterval={pauseInterval}
-          />
-          <SVG ref={svgRef}>
-            <g id="axisY" />
-          </SVG>
-        </>
+        <SVG ref={svgRef}>
+          <g id="axisY" />
+        </SVG>
       )}
     </Container>
   );
@@ -137,7 +135,7 @@ const Container = styled.div<IGridContainer>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem;
   border: 1px solid black;
   border-radius: 0.5rem;
   background-color: white;

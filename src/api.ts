@@ -16,7 +16,7 @@ const OPEN_API: Record<string, Record<string, string>> = {
     user: '5분간 집계된 고유 사용자 수',
     actx: '액티브 트랜잭션 수',
     rtime: '평균 응답 시간',
-    cpu: 'CPU 사용률',
+    cpu: 'CPU 사용률 (%)',
     threadpool_active: '쓰레드풀 활성 쓰레드 수',
     threadpool_queue: '쓰레드풀 큐잉 쓰레드 수',
     dbconn_total: '전체 DB Connection 수',

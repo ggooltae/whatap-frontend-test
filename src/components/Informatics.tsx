@@ -1,8 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 
+import WidgetHeader from './WidgetHeader';
 import ErrorBoundary from './ErrorBoundary';
-import IntervalControlButton from './IntervalControlButton';
 
 import api from '../api';
 import type { SpotData } from '../config/types';
@@ -33,29 +33,22 @@ function Informatics({
 }: IInformatics) {
   return (
     <Container gridArea={gridArea}>
-      <h3>{title}</h3>
+      <WidgetHeader
+        title={title}
+        isPaused={isPaused}
+        resumeInterval={resumeInterval}
+        pauseInterval={pauseInterval}
+      />
       {isError ? (
         <ErrorBoundary
           message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
         />
       ) : (
-        <>
-          {isPaused !== undefined && resumeInterval && pauseInterval ? (
-            <IntervalControlButton
-              isPaused={isPaused}
-              resumeInterval={resumeInterval}
-              pauseInterval={pauseInterval}
-            />
-          ) : (
-            <></>
-          )}
-
+        <InformContainer>
           {Object.keys(informData).map((key) => (
-            <div
-              key={key}
-            >{`${api.OPEN_API[''][key]}: ${informData[key]}`}</div>
+            <p key={key}>{`${api.OPEN_API[''][key]}: ${informData[key]}`}</p>
           ))}
-        </>
+        </InformContainer>
       )}
     </Container>
   );
@@ -67,9 +60,16 @@ const Container = styled.div<IGridContainer>`
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem;
   border: 1px solid black;
   border-radius: 0.5rem;
+`;
+
+const InformContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
 `;
 
 export default React.memo(Informatics);
