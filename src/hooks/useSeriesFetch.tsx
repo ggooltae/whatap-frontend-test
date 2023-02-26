@@ -32,13 +32,18 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
           stime,
           etime,
         });
-
         const SeriesData = fetchedData.data.data.map((pointData: string[]) => ({
           time: pointData[0],
           data: pointData[1],
         }));
 
         cache.current.set(`stime=${stime}/etime=${etime}`, SeriesData);
+
+        if (cache.current.size >= 2) {
+          const firstCacheKey = cache.current.entries().next().value[0];
+
+          cache.current.delete(firstCacheKey);
+        }
 
         setData(SeriesData);
       }

@@ -52,6 +52,12 @@ function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
             data: response.data,
           };
 
+          if (cache.current.size >= maxDataSize) {
+            const firstCacheKey = cache.current.entries().next().value[0];
+
+            cache.current.delete(firstCacheKey);
+          }
+
           cache.current.set(
             `stime=${stime}/etime=${etime}/timeMerge=${timeMerge}`,
             pointTimeData,
