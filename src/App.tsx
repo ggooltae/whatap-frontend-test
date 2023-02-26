@@ -161,15 +161,18 @@ const Global = createGlobalStyle`
 
 const GridContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-template-rows: 1fr, 3fr, 3fr, 3fr;
   grid-gap: 0.5rem;
   grid-template-areas:
     'a a'
     'b c'
     'd e'
     'f g';
-  padding: 3rem;
+  padding: 2rem;
+
+  @media screen and (max-width: 800px) {
+    display: flex;
+    flex-direction: column;
+  }
 `;
 
 const Title = styled.h1`
