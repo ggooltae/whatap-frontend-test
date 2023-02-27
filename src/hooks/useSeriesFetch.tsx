@@ -40,7 +40,7 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
         cache.current.set(`stime=${stime}/etime=${etime}`, SeriesData);
 
         if (cache.current.size >= 2) {
-          const firstCacheKey = cache.current.entries().next().value[0];
+          const firstCacheKey = cache.current.keys().next().value;
 
           cache.current.delete(firstCacheKey);
         }

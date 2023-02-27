@@ -53,7 +53,7 @@ function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
           };
 
           if (cache.current.size >= maxDataSize) {
-            const firstCacheKey = cache.current.entries().next().value[0];
+            const firstCacheKey = cache.current.keys().next().value;
 
             cache.current.delete(firstCacheKey);
           }
