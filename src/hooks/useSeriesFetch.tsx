@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 import api from '../api';
 
@@ -73,13 +73,8 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
     };
   }, [isPaused]);
 
-  function pauseInterval() {
-    setIsPaused(true);
-  }
-
-  function resumeInterval() {
-    setIsPaused(false);
-  }
+  const pauseInterval = useCallback(() => setIsPaused(true), []);
+  const resumeInterval = useCallback(() => setIsPaused(false), []);
 
   return { data, isPaused, isError, errorCount, pauseInterval, resumeInterval };
 }

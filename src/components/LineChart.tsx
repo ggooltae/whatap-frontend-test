@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { select } from 'd3-selection';
 import { scaleLinear, scaleTime } from 'd3-scale';
 import { axisLeft, axisBottom } from 'd3-axis';
@@ -111,7 +111,7 @@ function LineChart({
   }, [chartData, svgWidth, svgHeight]);
 
   return (
-    <Container gridArea={gridArea}>
+    <Container gridArea={gridArea} id="container">
       <WidgetHeader
         title={title}
         isPaused={isPaused}
@@ -150,4 +150,4 @@ const SVG = styled.svg`
   width: 100%;
 `;
 
-export default LineChart;
+export default React.memo(LineChart);

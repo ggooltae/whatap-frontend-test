@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { select } from 'd3-selection';
 import { scaleLinear, scaleBand } from 'd3-scale';
 import { axisLeft } from 'd3-axis';
@@ -145,4 +145,4 @@ const SVG = styled.svg`
   width: 100%;
 `;
 
-export default BarChart;
+export default React.memo(BarChart);

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 
 import api from '../api';
 import type { SeriesData, PointTimeData } from '../config/types';
@@ -92,15 +92,17 @@ function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
     };
   }, [isPaused]);
 
-  function pauseInterval() {
-    setIsPaused(true);
-  }
+  const pauseInterval = useCallback(() => setIsPaused(true), []);
+  const resumeInterval = useCallback(() => setIsPaused(false), []);
 
-  function resumeInterval() {
-    setIsPaused(false);
-  }
-
-  return { data, isPaused, isError, errorCount, pauseInterval, resumeInterval };
+  return {
+    data,
+    isPaused,
+    isError,
+    errorCount,
+    pauseInterval,
+    resumeInterval,
+  };
 }
 
 export default useProjectFetch;

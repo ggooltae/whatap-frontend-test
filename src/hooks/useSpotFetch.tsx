@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 import api from '../api';
 import type { SpotData } from '../config/types';
@@ -57,13 +57,8 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
     };
   }, [isPaused]);
 
-  function pauseInterval() {
-    setIsPaused(true);
-  }
-
-  function resumeInterval() {
-    setIsPaused(false);
-  }
+  const pauseInterval = useCallback(() => setIsPaused(true), []);
+  const resumeInterval = useCallback(() => setIsPaused(false), []);
 
   return { data, isPaused, isError, errorCount, pauseInterval, resumeInterval };
 }
