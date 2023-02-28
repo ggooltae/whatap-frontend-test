@@ -1,3 +1,5 @@
+import styled from 'styled-components';
+
 interface IIntervalControlButton {
   isPaused: boolean;
   resumeInterval: () => void;
@@ -14,8 +16,14 @@ function IntervalControlButton({
   }
 
   return (
-    <button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</button>
+    <Button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</Button>
   );
 }
+
+const Button = styled.button`
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 export default IntervalControlButton;
