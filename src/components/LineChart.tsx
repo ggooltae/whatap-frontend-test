@@ -148,8 +148,10 @@ function LineChart({
           svg
             .selectAll('circle')
             .attr('r', '3')
+            .attr('fill', COLOR.BLUE)
             .filter((d) => d === nearPointer)
-            .attr('r', '5');
+            .attr('r', '5')
+            .attr('fill', COLOR.HOVER);
 
           tooltip
             .html(
@@ -170,7 +172,7 @@ function LineChart({
       })
       .on('mouseout', () => {
         tooltip.style('opacity', 0);
-        svg.selectAll('circle').attr('r', '3');
+        svg.selectAll('circle').attr('r', '3').attr('fill', COLOR.BLUE);
       });
 
     return () => {
