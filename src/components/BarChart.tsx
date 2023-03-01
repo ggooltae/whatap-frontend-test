@@ -191,6 +191,7 @@ const Tooltip = styled.div`
   font-size: 0.8rem;
   background-color: yellow;
   border-radius: 5px;
+  width: 7.5rem;
   padding: 0.5rem;
   opacity: 0;
 `;
