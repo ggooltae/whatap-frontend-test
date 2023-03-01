@@ -11,4 +11,5 @@ export const MESSAGE = {
 
 export const COLOR = {
   BLUE: '#0066FF',
+  HOVER: '#FFA96A',
 };

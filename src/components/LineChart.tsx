@@ -11,7 +11,7 @@ import styled from 'styled-components';
 import WidgetHeader from './WidgetHeader';
 import ErrorBoundary from './ErrorBoundary';
 
-import { SeriesData, PointTimeData } from '../config/types';
+import { PointTimeData } from '../config/types';
 import { IGridContainer } from '../config/interfaces';
 
 import { MESSAGE, TIME, COLOR } from '../config/constants';
@@ -19,7 +19,7 @@ import { MESSAGE, TIME, COLOR } from '../config/constants';
 interface ILineChart {
   title: string;
   gridArea: string;
-  chartData: SeriesData;
+  chartData: PointTimeData[];
   isPaused: boolean;
   isError: boolean;
   errorCount: number;
@@ -113,7 +113,7 @@ function LineChart({
       .attr('cx', (d) => xScale(new Date(d.time)) + margin.left)
       .attr('cy', (d) => yScale(Number(d.data)))
       .attr('r', 3)
-      .attr('fill', 'steelblue');
+      .attr('fill', COLOR.BLUE);
 
     svg
       .select<SVGGElement>('#axisX')
