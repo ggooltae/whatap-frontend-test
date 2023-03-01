@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from 'react';
 
 import api from '../api';
 
-import type { SeriesData } from '../config/types';
+import type { PointTimeData } from '../config/types';
 import { TIME } from '../config/constants';
 
 interface IUseSeriesFetch {
@@ -11,17 +11,17 @@ interface IUseSeriesFetch {
 }
 
 function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
-  const [data, setData] = useState<SeriesData>([]);
+  const [data, setData] = useState<PointTimeData[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
   const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
-  const cache = useRef<Map<string, SeriesData>>(new Map());
+  const cache = useRef<Map<string, PointTimeData[]>>(new Map());
 
   async function getSeriesData() {
     const currentTime = Date.now() - (Date.now() % intervalTime);
-    const stime = (currentTime - 1 * TIME.HOUR).toString();
+    const stime = (currentTime - TIME.HOUR).toString();
     const etime = currentTime.toString();
 
     try {

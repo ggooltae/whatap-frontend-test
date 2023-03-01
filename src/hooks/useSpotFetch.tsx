@@ -9,7 +9,7 @@ interface IUseSpotFetch {
   includeInterval: boolean;
 }
 function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
-  const [data, setData] = useState<SpotData>({});
+  const [data, setData] = useState<SpotData[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
@@ -17,15 +17,18 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
 
   async function getSpotData() {
     try {
-      const newSpotData: SpotData = {};
+      const spotDataArray: SpotData[] = [];
 
       for (const key of keys) {
+        const newSpotData: SpotData = { key: '', data: -1 };
         const fetchedData = await api.spot(key);
 
-        newSpotData[fetchedData.key] = fetchedData.data;
+        newSpotData.key = fetchedData.key;
+        newSpotData.data = fetchedData.data;
+        spotDataArray.push(newSpotData);
       }
 
-      setData(newSpotData);
+      setData(spotDataArray);
       setIsError(false);
       setErrorCount(0);
     } catch (error) {

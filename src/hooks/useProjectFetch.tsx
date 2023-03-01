@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 
 import api from '../api';
-import type { SeriesData, PointTimeData } from '../config/types';
+import type { PointTimeData } from '../config/types';
 import { TIME } from '../config/constants';
 
 interface IUseProjectFetch {
@@ -11,7 +11,7 @@ interface IUseProjectFetch {
 }
 
 function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
-  const [data, setData] = useState<SeriesData>([]);
+  const [data, setData] = useState<PointTimeData[]>([]);
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
@@ -25,7 +25,7 @@ function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
     const currentTime = Date.now() - (Date.now() % (5 * TIME.SECOND));
 
     try {
-      const newProjectData: SeriesData = [];
+      const newProjectData: PointTimeData[] = [];
 
       for (let i = maxDataSize; i > 0; i--) {
         const stime = (currentTime - 5 * TIME.SECOND * i).toString();

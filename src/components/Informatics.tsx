@@ -13,7 +13,7 @@ import { MESSAGE } from '../config/constants';
 interface IInformatics {
   title: string;
   gridArea: string;
-  informData: SpotData;
+  informData: SpotData[];
   isError: boolean;
   errorCount: number;
   isPaused?: boolean;
@@ -45,8 +45,10 @@ function Informatics({
         />
       ) : (
         <InformContainer>
-          {Object.keys(informData).map((key) => (
-            <p key={key}>{`${api.OPEN_API[''][key]}: ${informData[key]}`}</p>
+          {informData.map((spotData, i) => (
+            <Inform key={spotData.key}>{`${api.OPEN_API[''][spotData.key]}: ${
+              informData[i].data
+            }`}</Inform>
           ))}
         </InformContainer>
       )}
@@ -68,8 +70,12 @@ const Container = styled.div<IGridContainer>`
 const InformContainer = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-around;
   height: 100%;
+`;
+
+const Inform = styled.p`
+  margin: 0.2rem 0;
 `;
 
 export default React.memo(Informatics);
