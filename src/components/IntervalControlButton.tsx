@@ -16,7 +16,7 @@ function IntervalControlButton({
   }
 
   return (
-    <Button onClick={handleButtonClick}>{isPaused ? 'start' : 'stop'}</Button>
+    <Button onClick={handleButtonClick}>{isPaused ? 'resume' : 'pause'}</Button>
   );
 }
 
