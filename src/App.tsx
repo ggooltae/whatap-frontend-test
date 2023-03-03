@@ -4,11 +4,10 @@ import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
 
-import useSpotFetch from './hooks/useSpotFetch';
-import useProjectFetch from './hooks/useProjectFetch';
-import useSeriesFetch from './hooks/useSeriesFetch';
+import useFetch from './hooks/useFetch';
 
 import api from './api';
+import { IProjectFetch, ISeriesFetch, ISpotFetch } from './config/interfaces';
 import { TIME } from './config/constants';
 
 function App() {
@@ -16,7 +15,8 @@ function App() {
     data: appInformData,
     isError: isAppInformDataError,
     errorCount: appInformDataErrorCount,
-  } = useSpotFetch({
+  } = useFetch<ISpotFetch>({
+    fetchType: 'spot',
     keys: api.APP_INFORM_KEYS,
     includeInterval: false,
   });
@@ -27,7 +27,8 @@ function App() {
     errorCount: cpuInformDataErrorCount,
     pauseInterval: pauseCpuDataInterval,
     resumeInterval: resumeCpuDataInterval,
-  } = useSpotFetch({
+  } = useFetch<ISpotFetch>({
+    fetchType: 'spot',
     keys: api.CPU_USAGE_KEY,
     includeInterval: true,
   });
@@ -39,7 +40,8 @@ function App() {
     errorCount: activeStatusErrorCount,
     pauseInterval: pauseActiveStatusInterval,
     resumeInterval: resumeActiveStatusInterval,
-  } = useSpotFetch({
+  } = useFetch<ISpotFetch>({
+    fetchType: 'spot',
     keys: api.ACTIVE_KEYS,
     includeInterval: true,
   });
@@ -51,7 +53,8 @@ function App() {
     errorCount: dbcStatusErrorCount,
     pauseInterval: pauseDbcStatusInterval,
     resumeInterval: resumeDbcStatusInterval,
-  } = useSpotFetch({
+  } = useFetch<ISpotFetch>({
+    fetchType: 'spot',
     keys: api.DBC_STATUS_KEYS,
     includeInterval: true,
   });
@@ -63,9 +66,9 @@ function App() {
     errorCount: TPSErrorCount,
     pauseInterval: pauseTPSInterval,
     resumeInterval: resumeTPSInterval,
-  } = useProjectFetch({
-    type: 'app_counter',
-    key: 'tps',
+  } = useFetch<IProjectFetch>({
+    fetchType: 'project',
+    key: 'app_counter/tps',
     timeRange: TIME.MINUTE,
   });
 
@@ -76,7 +79,8 @@ function App() {
     errorCount: activeUserErrorCount,
     pauseInterval: pauseActiveUserInterval,
     resumeInterval: resumeActiveUserInterval,
-  } = useSeriesFetch({
+  } = useFetch<ISeriesFetch>({
+    fetchType: 'series',
     key: 'visitor_5m',
     intervalTime: 5 * TIME.MINUTE,
   });
@@ -89,14 +93,14 @@ function App() {
         <Informatics
           title={'App Informatics'}
           gridArea={'b'}
-          informData={appInformData}
+          informData={appInformData || []}
           isError={isAppInformDataError}
           errorCount={appInformDataErrorCount}
         />
         <Informatics
           title={'CPU Informatics'}
           gridArea={'c'}
-          informData={cpuInformData}
+          informData={cpuInformData || []}
           isPaused={isCpuDataIntervalPaused}
           isError={isCpuInformDataError}
           errorCount={cpuInformDataErrorCount}
@@ -106,7 +110,7 @@ function App() {
         <BarChart
           title={'Active Status'}
           gridArea={'d'}
-          chartData={activeStatusData}
+          chartData={activeStatusData || []}
           isPaused={isActiveStatusIntervalPaused}
           isError={isActiveStatusError}
           errorCount={activeStatusErrorCount}
@@ -116,7 +120,7 @@ function App() {
         <BarChart
           title={'DB Connection Status'}
           gridArea={'e'}
-          chartData={dbcStatusData}
+          chartData={dbcStatusData || []}
           isPaused={isDbcStatusIntervalPaused}
           isError={isDbcStatusError}
           errorCount={dbcStatusErrorCount}
@@ -126,7 +130,7 @@ function App() {
         <LineChart
           title={'평균 TPS'}
           gridArea={'f'}
-          chartData={TPSData}
+          chartData={TPSData || []}
           isPaused={isTPSIntervalPaused}
           isError={isTPSError}
           errorCount={TPSErrorCount}
@@ -136,7 +140,7 @@ function App() {
         <LineChart
           title={'Active User'}
           gridArea={'g'}
-          chartData={activeUserData}
+          chartData={activeUserData || []}
           isPaused={isActiveUserIntervalPaused}
           isError={isActiveUserError}
           errorCount={activeUserErrorCount}
