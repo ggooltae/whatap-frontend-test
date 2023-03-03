@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useRef, useCallback } from 'react';
 
 import api from '../api';
 import type { SpotData } from '../config/types';
@@ -13,7 +13,8 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
+
+  const intervalId = useRef<NodeJS.Timer | undefined>();
 
   async function getSpotData() {
     try {
@@ -44,19 +45,19 @@ function useSpotFetch({ keys, includeInterval }: IUseSpotFetch) {
 
   useEffect(() => {
     if (isPaused) {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
     } else {
       getSpotData();
 
       if (includeInterval) {
         const id = setInterval(getSpotData, 5 * TIME.SECOND);
 
-        setIntervalId(id);
+        intervalId.current = id;
       }
     }
 
     return function cleanUp() {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
     };
   }, [isPaused]);
 

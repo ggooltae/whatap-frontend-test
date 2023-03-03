@@ -15,9 +15,9 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
   const cache = useRef<Map<string, PointTimeData[]>>(new Map());
+  const intervalId = useRef<NodeJS.Timer | undefined>();
 
   async function getSeriesData() {
     const currentTime = Date.now() - (Date.now() % intervalTime);
@@ -59,17 +59,17 @@ function useSeriesFetch({ key, intervalTime }: IUseSeriesFetch) {
 
   useEffect(() => {
     if (isPaused) {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
     } else {
       getSeriesData();
 
       const id = setInterval(getSeriesData, 5 * TIME.SECOND);
 
-      setIntervalId(id);
+      intervalId.current = id;
     }
 
     return function cleanUp() {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
     };
   }, [isPaused]);
 

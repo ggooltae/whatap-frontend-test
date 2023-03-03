@@ -15,9 +15,9 @@ function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
-  const [intervalId, setIntervalId] = useState<NodeJS.Timer | undefined>();
 
   const cache = useRef<Map<string, PointTimeData>>(new Map());
+  const intervalId = useRef<NodeJS.Timer | undefined>();
 
   const maxDataSize = timeRange / (5 * TIME.SECOND);
 
@@ -78,17 +78,17 @@ function useProjectFetch({ type, key, timeRange }: IUseProjectFetch) {
 
   useEffect(() => {
     if (isPaused) {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
     } else {
       getProjectData(type, key);
 
       const id = setInterval(() => getProjectData(type, key), 5 * TIME.SECOND);
 
-      setIntervalId(id);
+      intervalId.current = id;
     }
 
     return function cleanUp() {
-      clearInterval(intervalId);
+      clearInterval(intervalId.current);
     };
   }, [isPaused]);
 
