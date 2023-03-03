@@ -14,7 +14,7 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
 ) {
   type dataType = T extends ISpotFetch ? SpotData[] : PointTimeData[];
 
-  const [data, setData] = useState<dataType | undefined>(undefined);
+  const [data, setData] = useState<dataType | undefined>();
   const [isPaused, setIsPaused] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
