@@ -1,4 +1,6 @@
+import React from 'react';
 import styled from 'styled-components';
+import isEqual from 'lodash/isEqual';
 
 interface IWidgetHeader {
   title: string;
@@ -21,4 +23,6 @@ const Container = styled.div`
   margin-bottom: 0.5rem;
 `;
 
-export default WidgetHeader;
+export default React.memo(WidgetHeader, (prev, curr) =>
+  isEqual(prev.children, curr.children),
+);
