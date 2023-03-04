@@ -15,12 +15,12 @@ import { PointTimeData } from '../config/types';
 import { MESSAGE, TIME, COLOR } from '../config/constants';
 
 interface ILineChart {
-  chartData: PointTimeData[];
+  chartData: PointTimeData[] | undefined;
   isError: boolean;
   errorCount: number;
 }
 
-function LineChart({ chartData, isError, errorCount }: ILineChart) {
+function LineChart({ chartData = [], isError, errorCount }: ILineChart) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef(null);
   const [svgWidth, setSvgWidth] = useState(0);

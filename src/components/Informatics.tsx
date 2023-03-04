@@ -9,12 +9,12 @@ import type { SpotData } from '../config/types';
 import { MESSAGE } from '../config/constants';
 
 interface IInformatics {
-  informData: SpotData[];
+  informData: SpotData[] | undefined;
   isError: boolean;
   errorCount: number;
 }
 
-function Informatics({ informData, isError, errorCount }: IInformatics) {
+function Informatics({ informData = [], isError, errorCount }: IInformatics) {
   return isError ? (
     <ErrorBoundary
       message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}

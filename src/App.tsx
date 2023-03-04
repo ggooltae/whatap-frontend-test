@@ -96,7 +96,7 @@ function App() {
         <Widget gridArea="b">
           <WidgetHeader title="App Informatics" />
           <Informatics
-            informData={appInformData || []}
+            informData={appInformData}
             isError={isAppInformDataError}
             errorCount={appInformDataErrorCount}
           />
@@ -110,7 +110,7 @@ function App() {
             />
           </WidgetHeader>
           <Informatics
-            informData={cpuInformData || []}
+            informData={cpuInformData}
             isError={isCpuInformDataError}
             errorCount={cpuInformDataErrorCount}
           />
@@ -124,7 +124,7 @@ function App() {
             />
           </WidgetHeader>
           <BarChart
-            chartData={activeStatusData || []}
+            chartData={activeStatusData}
             isError={isActiveStatusError}
             errorCount={activeStatusErrorCount}
           />
@@ -138,7 +138,7 @@ function App() {
             />
           </WidgetHeader>
           <BarChart
-            chartData={dbcStatusData || []}
+            chartData={dbcStatusData}
             isError={isDbcStatusError}
             errorCount={dbcStatusErrorCount}
           />
@@ -152,7 +152,7 @@ function App() {
             />
           </WidgetHeader>
           <LineChart
-            chartData={TPSData || []}
+            chartData={TPSData}
             isError={isTPSError}
             errorCount={TPSErrorCount}
           />
@@ -166,7 +166,7 @@ function App() {
             />
           </WidgetHeader>
           <LineChart
-            chartData={activeUserData || []}
+            chartData={activeUserData}
             isError={isActiveUserError}
             errorCount={activeUserErrorCount}
           />

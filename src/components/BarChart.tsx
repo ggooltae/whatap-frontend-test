@@ -14,12 +14,12 @@ import type { SpotData } from '../config/types';
 import { MESSAGE, TIME, COLOR } from '../config/constants';
 
 interface IBarChart {
-  chartData: SpotData[];
+  chartData: SpotData[] | undefined;
   isError: boolean;
   errorCount: number;
 }
 
-function BarChart({ chartData, isError, errorCount }: IBarChart) {
+function BarChart({ chartData = [], isError, errorCount }: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef(null);
   const [svgWidth, setSvgWidth] = useState(0);
