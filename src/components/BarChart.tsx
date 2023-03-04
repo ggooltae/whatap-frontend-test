@@ -6,36 +6,20 @@ import 'd3-transition';
 import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
-import WidgetHeader from './WidgetHeader';
 import ErrorBoundary from './ErrorBoundary';
 
 import api from '../api';
 import type { SpotData } from '../config/types';
-import { IGridContainer } from '../config/interfaces';
 
 import { MESSAGE, TIME, COLOR } from '../config/constants';
 
 interface IBarChart {
-  title: string;
-  gridArea: string;
   chartData: SpotData[];
-  isPaused: boolean;
   isError: boolean;
   errorCount: number;
-  pauseInterval: () => void;
-  resumeInterval: () => void;
 }
 
-function BarChart({
-  title,
-  gridArea,
-  chartData,
-  isPaused,
-  isError,
-  errorCount,
-  pauseInterval,
-  resumeInterval,
-}: IBarChart) {
+function BarChart({ chartData, isError, errorCount }: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef(null);
   const [svgWidth, setSvgWidth] = useState(0);
@@ -141,40 +125,19 @@ function BarChart({
     };
   }, [chartData, svgWidth, svgHeight]);
 
-  return (
-    <Container gridArea={gridArea}>
-      <WidgetHeader
-        title={title}
-        isPaused={isPaused}
-        resumeInterval={resumeInterval}
-        pauseInterval={pauseInterval}
-      />
-      {isError ? (
-        <ErrorBoundary
-          message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
-        />
-      ) : (
-        <Chart>
-          <SVG ref={svgRef}>
-            <g id="axisY" />
-          </SVG>
-          <Tooltip ref={tooltipRef} />
-        </Chart>
-      )}
-    </Container>
+  return isError ? (
+    <ErrorBoundary
+      message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
+    />
+  ) : (
+    <Chart>
+      <SVG ref={svgRef}>
+        <g id="axisY" />
+      </SVG>
+      <Tooltip ref={tooltipRef} />
+    </Chart>
   );
 }
-
-const Container = styled.div<IGridContainer>`
-  grid-area: ${(props) => props.gridArea};
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 1.5rem;
-  border: 1px solid black;
-  border-radius: 0.5rem;
-  background-color: white;
-`;
 
 const Chart = styled.div`
   position: relative;

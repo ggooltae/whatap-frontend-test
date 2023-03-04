@@ -8,35 +8,19 @@ import 'd3-transition';
 import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
-import WidgetHeader from './WidgetHeader';
 import ErrorBoundary from './ErrorBoundary';
 
 import { PointTimeData } from '../config/types';
-import { IGridContainer } from '../config/interfaces';
 
 import { MESSAGE, TIME, COLOR } from '../config/constants';
 
 interface ILineChart {
-  title: string;
-  gridArea: string;
   chartData: PointTimeData[];
-  isPaused: boolean;
   isError: boolean;
   errorCount: number;
-  pauseInterval: () => void;
-  resumeInterval: () => void;
 }
 
-function LineChart({
-  title,
-  gridArea,
-  chartData,
-  isPaused,
-  isError,
-  errorCount,
-  pauseInterval,
-  resumeInterval,
-}: ILineChart) {
+function LineChart({ chartData, isError, errorCount }: ILineChart) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef(null);
   const [svgWidth, setSvgWidth] = useState(0);
@@ -182,45 +166,23 @@ function LineChart({
     };
   }, [chartData, svgWidth, svgHeight]);
 
-  return (
-    <Container gridArea={gridArea} id="container">
-      <WidgetHeader
-        title={title}
-        isPaused={isPaused}
-        resumeInterval={resumeInterval}
-        pauseInterval={pauseInterval}
-      />
-      {isError ? (
-        <ErrorBoundary
-          message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
-        />
-      ) : (
-        <Chart>
-          <SVG ref={svgRef}>
-            <path id="linePath" />
-            <path id="areaPath" />
-            <rect id="chartArea" />
-            <g id="axisX" />
-            <g id="axisY" />
-          </SVG>
-          <Tooltip ref={tooltipRef} />
-        </Chart>
-      )}
-    </Container>
+  return isError ? (
+    <ErrorBoundary
+      message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
+    />
+  ) : (
+    <Chart>
+      <SVG ref={svgRef}>
+        <path id="linePath" />
+        <path id="areaPath" />
+        <rect id="chartArea" />
+        <g id="axisX" />
+        <g id="axisY" />
+      </SVG>
+      <Tooltip ref={tooltipRef} />
+    </Chart>
   );
 }
-
-const Container = styled.div<IGridContainer>`
-  grid-area: ${(props) => props.gridArea};
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 1.5rem;
-  border: 1px solid black;
-  border-radius: 0.5rem;
-  background-color: white;
-`;
 
 const Chart = styled.div`
   position: relative;

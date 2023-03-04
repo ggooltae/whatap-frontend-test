@@ -1,32 +1,15 @@
 import styled from 'styled-components';
 
-import IntervalControlButton from './IntervalControlButton';
-
 interface IWidgetHeader {
   title: string;
-  isPaused?: boolean;
-  pauseInterval?: () => void;
-  resumeInterval?: () => void;
+  children?: React.ReactNode;
 }
 
-function WidgetHeader({
-  title,
-  isPaused,
-  pauseInterval,
-  resumeInterval,
-}: IWidgetHeader) {
+function WidgetHeader({ title, children }: IWidgetHeader) {
   return (
     <Container>
       <h3>{title}</h3>
-      {isPaused !== undefined && resumeInterval && pauseInterval ? (
-        <IntervalControlButton
-          isPaused={isPaused}
-          resumeInterval={resumeInterval}
-          pauseInterval={pauseInterval}
-        />
-      ) : (
-        <></>
-      )}
+      {children}
     </Container>
   );
 }

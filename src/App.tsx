@@ -1,5 +1,8 @@
 import styled, { createGlobalStyle } from 'styled-components';
 
+import Widget from './components/Widget';
+import WidgetHeader from './components/WidgetHeader';
+import IntervalControlButton from './components/IntervalControlButton';
 import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
@@ -90,63 +93,84 @@ function App() {
       <Global />
       <GridContainer>
         <Title>Application Monitoring Dashboard</Title>
-        <Informatics
-          title={'App Informatics'}
-          gridArea={'b'}
-          informData={appInformData || []}
-          isError={isAppInformDataError}
-          errorCount={appInformDataErrorCount}
-        />
-        <Informatics
-          title={'CPU Informatics'}
-          gridArea={'c'}
-          informData={cpuInformData || []}
-          isPaused={isCpuDataIntervalPaused}
-          isError={isCpuInformDataError}
-          errorCount={cpuInformDataErrorCount}
-          pauseInterval={pauseCpuDataInterval}
-          resumeInterval={resumeCpuDataInterval}
-        />
-        <BarChart
-          title={'Active Status'}
-          gridArea={'d'}
-          chartData={activeStatusData || []}
-          isPaused={isActiveStatusIntervalPaused}
-          isError={isActiveStatusError}
-          errorCount={activeStatusErrorCount}
-          pauseInterval={pauseActiveStatusInterval}
-          resumeInterval={resumeActiveStatusInterval}
-        />
-        <BarChart
-          title={'DB Connection Status'}
-          gridArea={'e'}
-          chartData={dbcStatusData || []}
-          isPaused={isDbcStatusIntervalPaused}
-          isError={isDbcStatusError}
-          errorCount={dbcStatusErrorCount}
-          pauseInterval={pauseDbcStatusInterval}
-          resumeInterval={resumeDbcStatusInterval}
-        />
-        <LineChart
-          title={'평균 TPS'}
-          gridArea={'f'}
-          chartData={TPSData || []}
-          isPaused={isTPSIntervalPaused}
-          isError={isTPSError}
-          errorCount={TPSErrorCount}
-          pauseInterval={pauseTPSInterval}
-          resumeInterval={resumeTPSInterval}
-        />
-        <LineChart
-          title={'Active User'}
-          gridArea={'g'}
-          chartData={activeUserData || []}
-          isPaused={isActiveUserIntervalPaused}
-          isError={isActiveUserError}
-          errorCount={activeUserErrorCount}
-          pauseInterval={pauseActiveUserInterval}
-          resumeInterval={resumeActiveUserInterval}
-        />
+        <Widget gridArea="b">
+          <WidgetHeader title="App Informatics" />
+          <Informatics
+            informData={appInformData || []}
+            isError={isAppInformDataError}
+            errorCount={appInformDataErrorCount}
+          />
+        </Widget>
+        <Widget gridArea="c">
+          <WidgetHeader title="CPU Informatics">
+            <IntervalControlButton
+              isPaused={isCpuDataIntervalPaused}
+              pauseInterval={pauseCpuDataInterval}
+              resumeInterval={resumeCpuDataInterval}
+            />
+          </WidgetHeader>
+          <Informatics
+            informData={cpuInformData || []}
+            isError={isCpuInformDataError}
+            errorCount={cpuInformDataErrorCount}
+          />
+        </Widget>
+        <Widget gridArea="d">
+          <WidgetHeader title="Active Status">
+            <IntervalControlButton
+              isPaused={isActiveStatusIntervalPaused}
+              pauseInterval={pauseActiveStatusInterval}
+              resumeInterval={resumeActiveStatusInterval}
+            />
+          </WidgetHeader>
+          <BarChart
+            chartData={activeStatusData || []}
+            isError={isActiveStatusError}
+            errorCount={activeStatusErrorCount}
+          />
+        </Widget>
+        <Widget gridArea="e">
+          <WidgetHeader title="DB Connection Status">
+            <IntervalControlButton
+              isPaused={isDbcStatusIntervalPaused}
+              pauseInterval={pauseDbcStatusInterval}
+              resumeInterval={resumeDbcStatusInterval}
+            />
+          </WidgetHeader>
+          <BarChart
+            chartData={dbcStatusData || []}
+            isError={isDbcStatusError}
+            errorCount={dbcStatusErrorCount}
+          />
+        </Widget>
+        <Widget gridArea="f">
+          <WidgetHeader title="평균 TPS">
+            <IntervalControlButton
+              isPaused={isTPSIntervalPaused}
+              pauseInterval={pauseTPSInterval}
+              resumeInterval={resumeTPSInterval}
+            />
+          </WidgetHeader>
+          <LineChart
+            chartData={TPSData || []}
+            isError={isTPSError}
+            errorCount={TPSErrorCount}
+          />
+        </Widget>
+        <Widget gridArea="g">
+          <WidgetHeader title="Active User">
+            <IntervalControlButton
+              isPaused={isActiveUserIntervalPaused}
+              pauseInterval={pauseActiveUserInterval}
+              resumeInterval={resumeActiveUserInterval}
+            />
+          </WidgetHeader>
+          <LineChart
+            chartData={activeUserData || []}
+            isError={isActiveUserError}
+            errorCount={activeUserErrorCount}
+          />
+        </Widget>
       </GridContainer>
     </>
   );
