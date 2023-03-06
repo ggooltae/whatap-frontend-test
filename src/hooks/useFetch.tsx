@@ -22,12 +22,12 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
   const cache = useRef<Map<string, PointTimeData>>(new Map());
   const intervalId = useRef<NodeJS.Timer | undefined>();
 
-  let fetchFunction: () => void;
+  let fetchFunction: () => Promise<void>;
 
   switch (args.fetchType) {
     case 'project':
-      fetchFunction = () =>
-        getProjectData({
+      fetchFunction = async () =>
+        await getProjectData({
           key: args.key,
           timeRange: args.timeRange,
           cache: cache.current,
@@ -39,8 +39,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
         });
       break;
     case 'series':
-      fetchFunction = () =>
-        getSeriesData({
+      fetchFunction = async () =>
+        await getSeriesData({
           key: args.key,
           intervalTime: args.intervalTime,
           cache: cache.current,
@@ -52,8 +52,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
         });
       break;
     case 'spot':
-      fetchFunction = () =>
-        getSpotData({
+      fetchFunction = async () =>
+        await getSpotData({
           keys: args.keys,
           includeInterval: args.includeInterval,
           setData: setData as React.Dispatch<React.SetStateAction<SpotData[]>>,
@@ -67,11 +67,15 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
     if (isPaused) {
       clearInterval(intervalId.current);
     } else {
-      fetchFunction();
+      args.addMessageQueue(fetchFunction);
 
-      const id = setInterval(fetchFunction, 5 * TIME.SECOND);
+      if (args.includeInterval) {
+        const id = setInterval(() => {
+          args.addMessageQueue(fetchFunction);
+        }, 5 * TIME.SECOND);
 
-      intervalId.current = id;
+        intervalId.current = id;
+      }
     }
 
     return function cleanUp() {

@@ -7,6 +7,7 @@ import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
 
+import useMessageQueue from './hooks/useMessageQueue';
 import useFetch from './hooks/useFetch';
 
 import api from './api';
@@ -14,6 +15,8 @@ import { IProjectFetch, ISeriesFetch, ISpotFetch } from './config/interfaces';
 import { TIME } from './config/constants';
 
 function App() {
+  const addMessageQueue = useMessageQueue();
+
   const {
     data: appInformData,
     isError: isAppInformDataError,
@@ -22,6 +25,7 @@ function App() {
     fetchType: 'spot',
     keys: api.APP_INFORM_KEYS,
     includeInterval: false,
+    addMessageQueue,
   });
   const {
     data: cpuInformData,
@@ -34,6 +38,7 @@ function App() {
     fetchType: 'spot',
     keys: api.CPU_USAGE_KEY,
     includeInterval: true,
+    addMessageQueue,
   });
 
   const {
@@ -47,6 +52,7 @@ function App() {
     fetchType: 'spot',
     keys: api.ACTIVE_KEYS,
     includeInterval: true,
+    addMessageQueue,
   });
 
   const {
@@ -60,6 +66,7 @@ function App() {
     fetchType: 'spot',
     keys: api.DBC_STATUS_KEYS,
     includeInterval: true,
+    addMessageQueue,
   });
 
   const {
@@ -73,6 +80,8 @@ function App() {
     fetchType: 'project',
     key: 'app_counter/tps',
     timeRange: TIME.MINUTE,
+    includeInterval: true,
+    addMessageQueue,
   });
 
   const {
@@ -86,6 +95,8 @@ function App() {
     fetchType: 'series',
     key: 'visitor_5m',
     intervalTime: 5 * TIME.MINUTE,
+    includeInterval: true,
+    addMessageQueue,
   });
 
   return (
