@@ -8,8 +8,8 @@ interface IGetSeriesData {
   intervalTime: number;
   cache: Map<string, PointTimeData>;
   setData: React.Dispatch<React.SetStateAction<PointTimeData[]>>;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorCount: React.Dispatch<React.SetStateAction<number>>;
+  setHasFetchError: React.Dispatch<React.SetStateAction<boolean>>;
+  setFetchErrorCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 async function getSeriesData({
@@ -17,8 +17,8 @@ async function getSeriesData({
   intervalTime,
   cache,
   setData,
-  setIsError,
-  setErrorCount,
+  setHasFetchError,
+  setFetchErrorCount,
 }: IGetSeriesData) {
   const currentTime = Date.now() - (Date.now() % intervalTime);
   const stime = (currentTime - TIME.HOUR).toString();
@@ -48,12 +48,12 @@ async function getSeriesData({
       setData(SeriesData);
     }
 
-    setIsError(false);
-    setErrorCount(0);
+    setHasFetchError(false);
+    setFetchErrorCount(0);
   } catch (error) {
     console.error('Error fetching spot data:', error);
-    setIsError(true);
-    setErrorCount((errorCount) => errorCount + 1);
+    setHasFetchError(true);
+    setFetchErrorCount((errorCount) => errorCount + 1);
   }
 }
 

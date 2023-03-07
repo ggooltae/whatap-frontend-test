@@ -7,8 +7,8 @@ interface IGetProjectData {
   timeRange: number;
   cache: Map<string, PointTimeData>;
   setData: React.Dispatch<React.SetStateAction<PointTimeData[]>>;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorCount: React.Dispatch<React.SetStateAction<number>>;
+  setHasFetchError: React.Dispatch<React.SetStateAction<boolean>>;
+  setFetchErrorCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 async function getProjectData({
@@ -16,8 +16,8 @@ async function getProjectData({
   timeRange,
   cache,
   setData,
-  setIsError,
-  setErrorCount,
+  setHasFetchError,
+  setFetchErrorCount,
 }: IGetProjectData) {
   const maxDataSize = timeRange / (5 * TIME.SECOND);
   const currentTime = Date.now() - (Date.now() % (5 * TIME.SECOND));
@@ -65,12 +65,12 @@ async function getProjectData({
     }
 
     setData(newProjectData);
-    setIsError(false);
-    setErrorCount(0);
+    setHasFetchError(false);
+    setFetchErrorCount(0);
   } catch (error) {
     console.error('Error fetching project data:', error);
-    setIsError(true);
-    setErrorCount((errorCount) => errorCount + 1);
+    setHasFetchError(true);
+    setFetchErrorCount((errorCount) => errorCount + 1);
   }
 }
 

@@ -6,16 +6,16 @@ interface IGetSpotData {
   keys: string[];
   includeInterval: boolean;
   setData: React.Dispatch<React.SetStateAction<SpotData[]>>;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorCount: React.Dispatch<React.SetStateAction<number>>;
+  setHasFetchError: React.Dispatch<React.SetStateAction<boolean>>;
+  setFetchErrorCount: React.Dispatch<React.SetStateAction<number>>;
 }
 
 async function getSpotData({
   keys,
   includeInterval,
   setData,
-  setIsError,
-  setErrorCount,
+  setHasFetchError,
+  setFetchErrorCount,
 }: IGetSpotData) {
   try {
     const spotDataArray: SpotData[] = [];
@@ -30,12 +30,12 @@ async function getSpotData({
     }
 
     setData(spotDataArray);
-    setIsError(false);
-    setErrorCount(0);
+    setHasFetchError(false);
+    setFetchErrorCount(0);
   } catch (error) {
     console.error('Error fetching spot data:', error);
-    setIsError(true);
-    setErrorCount((errorCount) => errorCount + 1);
+    setHasFetchError(true);
+    setFetchErrorCount((errorCount) => errorCount + 1);
 
     if (!includeInterval) {
       setTimeout(
@@ -44,8 +44,8 @@ async function getSpotData({
             keys,
             includeInterval,
             setData,
-            setIsError,
-            setErrorCount,
+            setHasFetchError,
+            setFetchErrorCount,
           }),
         5 * TIME.SECOND,
       );

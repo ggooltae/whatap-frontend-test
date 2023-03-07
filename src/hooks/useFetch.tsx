@@ -16,8 +16,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
 
   const [data, setData] = useState<dataType | undefined>();
   const [isPaused, setIsPaused] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorCount, setErrorCount] = useState(0);
+  const [hasFetchError, setHasFetchError] = useState(false);
+  const [fetchErrorCount, setFetchErrorCount] = useState(0);
 
   const cache = useRef<Map<string, PointTimeData>>(new Map());
   const intervalId = useRef<NodeJS.Timer | undefined>();
@@ -34,8 +34,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
           setData: setData as React.Dispatch<
             React.SetStateAction<PointTimeData[]>
           >,
-          setIsError,
-          setErrorCount,
+          setHasFetchError,
+          setFetchErrorCount,
         });
       break;
     case 'series':
@@ -47,8 +47,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
           setData: setData as React.Dispatch<
             React.SetStateAction<PointTimeData[]>
           >,
-          setIsError,
-          setErrorCount,
+          setHasFetchError,
+          setFetchErrorCount,
         });
       break;
     case 'spot':
@@ -57,8 +57,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
           keys: args.keys,
           includeInterval: args.includeInterval,
           setData: setData as React.Dispatch<React.SetStateAction<SpotData[]>>,
-          setIsError,
-          setErrorCount,
+          setHasFetchError,
+          setFetchErrorCount,
         });
       break;
   }
@@ -89,8 +89,8 @@ function useFetch<T extends IProjectFetch | ISeriesFetch | ISpotFetch>(
   return {
     data,
     isPaused,
-    isError,
-    errorCount,
+    hasFetchError,
+    fetchErrorCount,
     pauseInterval,
     resumeInterval,
   };
