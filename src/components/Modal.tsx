@@ -62,6 +62,11 @@ const Content = styled.div`
       transform: translateY(0%);
     }
   }
+
+  @media screen and (max-width: 50rem) {
+    width: 80vw;
+    height: 80vw;
+  }
 `;
 
 export default Modal;

@@ -2,6 +2,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 
 import Widget from './components/Widget';
 import WidgetHeader from './components/WidgetHeader';
+import InformationButton from './components/InformationButton';
 import IntervalControlButton from './components/IntervalControlButton';
 import WidgetBody from './components/WidgetBody';
 import Informatics from './components/Informatics';
@@ -131,6 +132,7 @@ function App() {
         </Widget>
         <Widget gridArea="d">
           <WidgetHeader title="Active Status">
+            <InformationButton widgetKey="act_stat" />
             <IntervalControlButton
               isPaused={isActiveStatusIntervalPaused}
               pauseInterval={pauseActiveStatusInterval}
@@ -146,6 +148,7 @@ function App() {
         </Widget>
         <Widget gridArea="e">
           <WidgetHeader title="DB Connection Status">
+            <InformationButton widgetKey="db_conn" />
             <IntervalControlButton
               isPaused={isDbcStatusIntervalPaused}
               pauseInterval={pauseDbcStatusInterval}
@@ -161,6 +164,7 @@ function App() {
         </Widget>
         <Widget gridArea="f">
           <WidgetHeader title="평균 TPS">
+            <InformationButton widgetKey="avg_tps" />
             <IntervalControlButton
               isPaused={isTPSIntervalPaused}
               pauseInterval={pauseTPSInterval}
@@ -176,6 +180,7 @@ function App() {
         </Widget>
         <Widget gridArea="g">
           <WidgetHeader title="Active User">
+            <InformationButton widgetKey="act_user" />
             <IntervalControlButton
               isPaused={isActiveUserIntervalPaused}
               pauseInterval={pauseActiveUserInterval}

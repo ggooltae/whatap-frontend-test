@@ -12,4 +12,9 @@ export const MESSAGE = Object.freeze({
 export const COLOR = Object.freeze({
   BLUE: '#0066FF',
   HOVER: '#FFA96A',
+  LIGHT_GRAY: '#DBE2EF',
+  WHITE: '#FFFFFF',
+  BLACK: '#000000',
+  RED: '#FF4136',
+  GREEN: '#2ECC40',
 });
