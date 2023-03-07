@@ -6,20 +6,16 @@ import 'd3-transition';
 import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
-import ErrorBoundary from './ErrorBoundary';
-
 import api from '../api';
 import type { SpotData } from '../config/types';
 
-import { MESSAGE, TIME, COLOR } from '../config/constants';
+import { TIME, COLOR } from '../config/constants';
 
 interface IBarChart {
   chartData: SpotData[] | undefined;
-  isError: boolean;
-  errorCount: number;
 }
 
-function BarChart({ chartData = [], isError, errorCount }: IBarChart) {
+function BarChart({ chartData = [] }: IBarChart) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef(null);
   const [svgWidth, setSvgWidth] = useState(0);
@@ -125,11 +121,7 @@ function BarChart({ chartData = [], isError, errorCount }: IBarChart) {
     };
   }, [chartData, svgWidth, svgHeight]);
 
-  return isError ? (
-    <ErrorBoundary
-      message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
-    />
-  ) : (
+  return (
     <Chart>
       <SVG ref={svgRef}>
         <g id="axisY" />

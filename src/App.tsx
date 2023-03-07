@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import Widget from './components/Widget';
 import WidgetHeader from './components/WidgetHeader';
 import IntervalControlButton from './components/IntervalControlButton';
+import WidgetBody from './components/WidgetBody';
 import Informatics from './components/Informatics';
 import BarChart from './components/BarChart';
 import LineChart from './components/LineChart';
@@ -19,8 +20,8 @@ function App() {
 
   const {
     data: appInformData,
-    isError: isAppInformDataError,
-    errorCount: appInformDataErrorCount,
+    hasFetchError: hasAppInformDataError,
+    fetchErrorCount: appInformDataErrorCount,
   } = useFetch<ISpotFetch>({
     fetchType: 'spot',
     keys: api.APP_INFORM_KEYS,
@@ -30,8 +31,8 @@ function App() {
   const {
     data: cpuInformData,
     isPaused: isCpuDataIntervalPaused,
-    isError: isCpuInformDataError,
-    errorCount: cpuInformDataErrorCount,
+    hasFetchError: hasCpuInformDataError,
+    fetchErrorCount: cpuInformDataErrorCount,
     pauseInterval: pauseCpuDataInterval,
     resumeInterval: resumeCpuDataInterval,
   } = useFetch<ISpotFetch>({
@@ -44,8 +45,8 @@ function App() {
   const {
     data: activeStatusData,
     isPaused: isActiveStatusIntervalPaused,
-    isError: isActiveStatusError,
-    errorCount: activeStatusErrorCount,
+    hasFetchError: hasActiveStatusError,
+    fetchErrorCount: activeStatusErrorCount,
     pauseInterval: pauseActiveStatusInterval,
     resumeInterval: resumeActiveStatusInterval,
   } = useFetch<ISpotFetch>({
@@ -58,8 +59,8 @@ function App() {
   const {
     data: dbcStatusData,
     isPaused: isDbcStatusIntervalPaused,
-    isError: isDbcStatusError,
-    errorCount: dbcStatusErrorCount,
+    hasFetchError: hasDbcStatusError,
+    fetchErrorCount: dbcStatusErrorCount,
     pauseInterval: pauseDbcStatusInterval,
     resumeInterval: resumeDbcStatusInterval,
   } = useFetch<ISpotFetch>({
@@ -72,8 +73,8 @@ function App() {
   const {
     data: TPSData,
     isPaused: isTPSIntervalPaused,
-    isError: isTPSError,
-    errorCount: TPSErrorCount,
+    hasFetchError: hasTPSError,
+    fetchErrorCount: TPSErrorCount,
     pauseInterval: pauseTPSInterval,
     resumeInterval: resumeTPSInterval,
   } = useFetch<IProjectFetch>({
@@ -87,8 +88,8 @@ function App() {
   const {
     data: activeUserData,
     isPaused: isActiveUserIntervalPaused,
-    isError: isActiveUserError,
-    errorCount: activeUserErrorCount,
+    hasFetchError: hasActiveUserError,
+    fetchErrorCount: activeUserErrorCount,
     pauseInterval: pauseActiveUserInterval,
     resumeInterval: resumeActiveUserInterval,
   } = useFetch<ISeriesFetch>({
@@ -106,11 +107,12 @@ function App() {
         <Title>Application Monitoring Dashboard</Title>
         <Widget gridArea="b">
           <WidgetHeader title="App Informatics" />
-          <Informatics
-            informData={appInformData}
-            isError={isAppInformDataError}
-            errorCount={appInformDataErrorCount}
-          />
+          <WidgetBody
+            hasFetchError={hasAppInformDataError}
+            fetchErrorCount={appInformDataErrorCount}
+          >
+            <Informatics informData={appInformData} />
+          </WidgetBody>
         </Widget>
         <Widget gridArea="c">
           <WidgetHeader title="CPU Informatics">
@@ -120,11 +122,12 @@ function App() {
               resumeInterval={resumeCpuDataInterval}
             />
           </WidgetHeader>
-          <Informatics
-            informData={cpuInformData}
-            isError={isCpuInformDataError}
-            errorCount={cpuInformDataErrorCount}
-          />
+          <WidgetBody
+            hasFetchError={hasCpuInformDataError}
+            fetchErrorCount={cpuInformDataErrorCount}
+          >
+            <Informatics informData={cpuInformData} />
+          </WidgetBody>
         </Widget>
         <Widget gridArea="d">
           <WidgetHeader title="Active Status">
@@ -134,11 +137,12 @@ function App() {
               resumeInterval={resumeActiveStatusInterval}
             />
           </WidgetHeader>
-          <BarChart
-            chartData={activeStatusData}
-            isError={isActiveStatusError}
-            errorCount={activeStatusErrorCount}
-          />
+          <WidgetBody
+            hasFetchError={hasActiveStatusError}
+            fetchErrorCount={activeStatusErrorCount}
+          >
+            <BarChart chartData={activeStatusData} />
+          </WidgetBody>
         </Widget>
         <Widget gridArea="e">
           <WidgetHeader title="DB Connection Status">
@@ -148,11 +152,12 @@ function App() {
               resumeInterval={resumeDbcStatusInterval}
             />
           </WidgetHeader>
-          <BarChart
-            chartData={dbcStatusData}
-            isError={isDbcStatusError}
-            errorCount={dbcStatusErrorCount}
-          />
+          <WidgetBody
+            hasFetchError={hasDbcStatusError}
+            fetchErrorCount={dbcStatusErrorCount}
+          >
+            <BarChart chartData={dbcStatusData} />
+          </WidgetBody>
         </Widget>
         <Widget gridArea="f">
           <WidgetHeader title="평균 TPS">
@@ -162,11 +167,12 @@ function App() {
               resumeInterval={resumeTPSInterval}
             />
           </WidgetHeader>
-          <LineChart
-            chartData={TPSData}
-            isError={isTPSError}
-            errorCount={TPSErrorCount}
-          />
+          <WidgetBody
+            hasFetchError={hasTPSError}
+            fetchErrorCount={TPSErrorCount}
+          >
+            <LineChart chartData={TPSData} />
+          </WidgetBody>
         </Widget>
         <Widget gridArea="g">
           <WidgetHeader title="Active User">
@@ -176,11 +182,12 @@ function App() {
               resumeInterval={resumeActiveUserInterval}
             />
           </WidgetHeader>
-          <LineChart
-            chartData={activeUserData}
-            isError={isActiveUserError}
-            errorCount={activeUserErrorCount}
-          />
+          <WidgetBody
+            hasFetchError={hasActiveUserError}
+            fetchErrorCount={activeUserErrorCount}
+          >
+            <LineChart chartData={activeUserData} />
+          </WidgetBody>
         </Widget>
       </GridContainer>
     </>

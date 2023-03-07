@@ -1,3 +1,4 @@
+import React from 'react';
 import styled from 'styled-components';
 
 interface IIntervalControlButton {
@@ -26,4 +27,4 @@ const Button = styled.button`
   }
 `;
 
-export default IntervalControlButton;
+export default React.memo(IntervalControlButton);

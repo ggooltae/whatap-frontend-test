@@ -8,19 +8,15 @@ import 'd3-transition';
 import debounce from 'lodash/debounce';
 import styled from 'styled-components';
 
-import ErrorBoundary from './ErrorBoundary';
-
 import { PointTimeData } from '../config/types';
 
-import { MESSAGE, TIME, COLOR } from '../config/constants';
+import { TIME, COLOR } from '../config/constants';
 
 interface ILineChart {
   chartData: PointTimeData[] | undefined;
-  isError: boolean;
-  errorCount: number;
 }
 
-function LineChart({ chartData = [], isError, errorCount }: ILineChart) {
+function LineChart({ chartData = [] }: ILineChart) {
   const svgRef = useRef<SVGSVGElement>(null);
   const tooltipRef = useRef(null);
   const [svgWidth, setSvgWidth] = useState(0);
@@ -72,6 +68,9 @@ function LineChart({ chartData = [], isError, errorCount }: ILineChart) {
       .x((d) => xScale(d.time))
       .y0(chartHeight)
       .y1((d) => yScale(Number(d.data)));
+
+    if (svg.select('#linePath').empty() || svg.select('#areaPath').empty())
+      return;
 
     svg
       .select('#linePath')
@@ -166,11 +165,7 @@ function LineChart({ chartData = [], isError, errorCount }: ILineChart) {
     };
   }, [chartData, svgWidth, svgHeight]);
 
-  return isError ? (
-    <ErrorBoundary
-      message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
-    />
-  ) : (
+  return (
     <Chart>
       <SVG ref={svgRef}>
         <path id="linePath" />

@@ -1,25 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import ErrorBoundary from './ErrorBoundary';
-
 import api from '../api';
 import type { SpotData } from '../config/types';
 
-import { MESSAGE } from '../config/constants';
-
 interface IInformatics {
   informData: SpotData[] | undefined;
-  isError: boolean;
-  errorCount: number;
 }
 
-function Informatics({ informData = [], isError, errorCount }: IInformatics) {
-  return isError ? (
-    <ErrorBoundary
-      message={`${MESSAGE.FETCH_ERROR} (재시도 횟수: ${errorCount})`}
-    />
-  ) : (
+function Informatics({ informData = [] }: IInformatics) {
+  return (
     <InformContainer>
       {informData.map((spotData, i) => (
         <Inform key={spotData.key}>{`${api.OPEN_API[''][spotData.key]}: ${
@@ -34,6 +24,8 @@ const InformContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  align-items: center;
+  width: 100%;
   height: 100%;
 `;
 
