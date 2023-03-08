@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ErrorMessage from './FetchErrorMessage';
+import ErrorMessage from './ErrorMessage';
 
 import { MESSAGE } from '../config/constants';
 
